@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+<title>Java Basics | Hexo</title>
+
+
+
+    <link rel="icon" href="/linkneil/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/linkneil/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/linkneil/js/script.js"></script>
+    
+    <script src="/linkneil/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/linkneil/">Bentham&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/linkneil/archives">Posts</a>
+                
+                    <a class="menu-item" href="/linkneil/category">Categories</a>
+                
+                    <a class="menu-item" href="/linkneil/tag">Tags</a>
+                
+                    <a class="menu-item" href="/linkneil/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/linkneil/">Bentham&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/linkneil/archives">Posts</a>
+                
+                    <a class="menu-item" href="/linkneil/category">Categories</a>
+                
+                    <a class="menu-item" href="/linkneil/tag">Tags</a>
+                
+                    <a class="menu-item" href="/linkneil/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Java Basics</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">John Doe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 11, 2023&nbsp;&nbsp;14:10:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/linkneil/categories/Basic/">Basic</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="Java-Basics"><a href="#Java-Basics" class="headerlink" title="Java Basics"></a>Java Basics</h2><h3 id="Java-名詞有哪些"><a href="#Java-名詞有哪些" class="headerlink" title="Java 名詞有哪些?"></a>Java 名詞有哪些?</h3><ol>
+<li>類(Class)：Java 中定義物件屬性和行為的範本。</li>
+<li>對象(Object)：類的實例，是類的具體表現。</li>
+<li>方法(Method)：類中定義的功能，可以被物件調用。</li>
+<li>變數(Variable)：類中定義的儲存資料的地方。</li>
+<li>構造器(Constructor)：類中定義的創建物件的方法。</li>
+<li>介面(Interface)：定義了一組方法簽名，類可以選擇實現這些方法。</li>
+<li>包(Package)：Java 的命名空間，用於組織類和介面。</li>
+<li>繼承(Inheritance)：一個類可以從另一個類繼承屬性和方法。</li>
+<li>多態(Polymorphism)：一個物件可以具有多種類型。</li>
+<li>封裝(Encapsulation)：將物件的屬性和行為封裝在一起，隱藏實現細節。</li>
+</ol>
+<h3 id="Java三大特性"><a href="#Java三大特性" class="headerlink" title="Java三大特性"></a>Java三大特性</h3><ol>
+<li>封裝(Encapsulation)：封裝是物件導向程式設計的基本特性之一，它指的是將物件的屬性和行為封裝在一起，隱藏實現細節。</li>
+<li>繼承(Inheritance)：繼承是物件導向程式設計的基本特性之二，它允許一個類繼承另一個類的屬性和行為。</li>
+<li>多態(Polymorphism)：多態是物件導向程式設計的基本特性之三，它允許一個物件具有多種類型，並且可以根據不同類型採取不同的行為。</li>
+</ol>
+<h3 id="說明Spring-Batch-Spring-Data-Spring-Annotation"><a href="#說明Spring-Batch-Spring-Data-Spring-Annotation" class="headerlink" title="說明Spring Batch, Spring Data, Spring Annotation"></a>說明Spring Batch, Spring Data, Spring Annotation</h3><ol>
+<li>Spring Batch 是 Spring 框架的一部分，它是一個開源框架，用於處理大量的批量數據處理。它提供了一個統一的架構，用於處理輸入數據、處理數據、寫入輸出數據和錯誤處理。它支持多種不同類型的數據，如數據庫、CSV、XML等。</li>
+<li>Spring Data 是 Spring 框架的一部分，它是一個開源框架，用於簡化數據庫訪問和操作。它提供了一個統一的訪問介面，用於訪問不同類型的數據存儲，如關係數據庫、NoSQL數據庫、文件系統等。</li>
+<li>Spring Annotation 是 Spring 框架中的一種用於註釋類和方法的技術。這些註釋可以用於定義類和方法的行為，例如在類上註釋 @Component 可以告訴 Spring 這個類是一個組件，可以用於自動配置。</li>
+</ol>
+<p>Spring Core: 提供了IoC和依賴注入功能。<br>Spring MVC: 提供了基於MVC模式的web框架。<br>Spring Data: 提供了對各種資料來源的支援。<br>Spring Security: 提供了應用程式安全性的功能。<br>Spring AOP: 提供了面向切面程式設計的功能。<br>Spring Boot: 提供了快速構建和部署Spring應用程式的功能。<br>Spring Cloud: 提供了微服務架構的支援。<br>Spring Batch: 提供了批次處理作業的功能。</p>
+<h3 id="說明Hibernate、Spring-Framework"><a href="#說明Hibernate、Spring-Framework" class="headerlink" title="說明Hibernate、Spring Framework"></a>說明Hibernate、Spring Framework</h3><ol>
+<li>Hibernate 是一個開源的實體關係映射框架，可以在 Java 項目中與資料庫進行交互。它提供了一個高層次的對象導向 API，可以將類與資料表之間的映射自動轉換為SQL語句。Hibernate 提供了自動生成表結構和紀錄的功能，還支援事務管理和性能優化。</li>
+<li>Spring Framework 是一個開源的應用程式開發框架，提供了一組全面的工具和服務，用於開發基於Java的應用程式。Spring 提供了許多功能，如依賴注入，事務管理，Web應用程式開發，數據訪問等。它還支援與其他框架，如 Hibernate 一起使用。這使開發人員能夠結合 Spring 框架中的依賴注入和事務管理功能與 Hibernate 中的實體關係映射功能。</li>
+</ol>
+<h3 id="spring-amp-springboot-框架"><a href="#spring-amp-springboot-框架" class="headerlink" title="spring &amp; springboot 框架"></a>spring &amp; springboot 框架</h3><p>spring是輕量級的Java框架，非侵入式，框架api業務邏輯<br>spring 容器，透過設定去管理物件生命週期<br>IOC控制反轉，依賴注入，不必寫很多關聯，需再注入就可以<br>AOP，記錄安全交易，需要再縫入，跟業務邏輯分開的<br>springboot將複雜簡化，不用過多繁雜的xml配置，注入即用</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>John Doe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://neiltu.github.io/linkneil/2023/03/11/005_Java/">https://neiltu.github.io/linkneil/2023/03/11/005_Java/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/linkneil/tags/Java/"># Java</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/linkneil/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/linkneil/2023/03/12/006_Waterfall%20vs%20Agile/">Waterfall vs Agile</a>
+            
+            
+            <a class="next" rel="next" href="/linkneil/2023/03/10/004_Simple%20qa/">Simple question and answer</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© John Doe | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
