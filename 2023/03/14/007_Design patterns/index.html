@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+<title>Design patterns | Hexo</title>
+
+
+
+    <link rel="icon" href="/linkneil/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/linkneil/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/linkneil/js/script.js"></script>
+    
+    <script src="/linkneil/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/linkneil/">Bentham&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/linkneil/archives">Posts</a>
+                
+                    <a class="menu-item" href="/linkneil/category">Categories</a>
+                
+                    <a class="menu-item" href="/linkneil/tag">Tags</a>
+                
+                    <a class="menu-item" href="/linkneil/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/linkneil/">Bentham&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/linkneil/archives">Posts</a>
+                
+                    <a class="menu-item" href="/linkneil/category">Categories</a>
+                
+                    <a class="menu-item" href="/linkneil/tag">Tags</a>
+                
+                    <a class="menu-item" href="/linkneil/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Design patterns</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">John Doe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 14, 2023&nbsp;&nbsp;19:26:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/linkneil/categories/Java/">Java</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="design-patterns-of-SOA-OOD-AOP"><a href="#design-patterns-of-SOA-OOD-AOP" class="headerlink" title="design patterns of SOA, OOD, AOP"></a>design patterns of SOA, OOD, AOP</h2><h3 id="SOA-OOD-AOP"><a href="#SOA-OOD-AOP" class="headerlink" title="SOA, OOD, AOP"></a>SOA, OOD, AOP</h3><p>Expert-level understanding of SOA, OOD, AOP, and design patterns<br>SOA (Service-Oriented Architecture) 是一種架構風格，它提倡將系統分解成獨立的服務，並通過互相協作來完成業務功能。SOA 鼓勵使用標準化的通信協定和服務介面，以實現系統的鬆散耦合。<br>OOD (Object-Oriented Design) 是物件導向設計的一種方法。它將系統建模成一組物件，每個物件都擁有自己的狀態和行為。通過將問題劃分成一組物件並定義它們之間的關係，可以更好地理解和解決問題。<br>AOP (Aspect-Oriented Programming) 是面向切面程式設計的一種程式設計思想。 AOP 關注于應用程式的公共行為（稱為切面），並將其與業務邏輯分離開來。 這樣可以減少代碼的冗餘，提高代碼的可讀性和可維護性。<br>OOP(Object-Oriented Programming)<br>常見的程式設計模型有：<br>•面向過程程式設計 (Procedural Programming)： 一種按照線性順序來執行電腦程式的程式設計方式，以過程和函數為核心單位。<br>•物件導向程式設計 (Object-Oriented Programming)： 一種以物件為核心單位的程式設計方式，通過抽象類別和介面來描述物件的特徵和行為。<br>•面向切面程式設計 (Aspect-Oriented Programming)：一種以切面為核心單位的程式設計方式，更注重在程式中共同的功能或行為。<br>•函數式程式設計 (Functional Programming)：一種以函數為核心單位的程式設計方式，不允許有狀態變化，只允許有資料轉換。<br>•回應式程式設計 (Reactive Programming)： 一種程式設計方式，用於處理非同步和事件驅動的系統。</p>
+<h3 id="ps"><a href="#ps" class="headerlink" title="ps."></a>ps.</h3><p>•SOA (Service-Oriented Architecture) 是一種軟體設計風格，它將系統分割成多個獨立的服務，並通過網路協作達成整體的功能。SOA 強調服務的再使用性、可擴展性和可維護性。<br>•OOD (Object-Oriented Design) 是一種軟體設計方法，它將系統分割成多個獨立的物件。物件封裝資料和行為，並與其他物件進行互動。OOD 通常使用類與對象的概念來實現。<br>•OOP (Object-Oriented Programming) 是一種程式設計風格，它將程式構建成多個獨立的物件。物件封裝資料和行為，並與其他物件進行互動。OOP 通常使用類與對象的概念來實現。<br>•AOP (Aspect-Oriented Programming) 是一種程式設計風格，它專門處理系統中的共性邏輯，如日誌記錄、安全性等。AOP 使用「關鍵字」或「切面」的概念來將共性邏輯與實際邏輯分離開來。<br>•封裝(Encapsulation)：封裝是物件導向程式設計的基本特性之一，它指的是將物件的屬性和行為封裝在一起，隱藏實現細節。<br>•繼承(Inheritance)：繼承是物件導向程式設計的基本特性之二，它允許一個類繼承另一個類的屬性和行為。<br>•多態(Polymorphism)：多態是物件導向程式設計的基本特性之三，它允許一個物件具有多種類型，並且可以根據不同類型採取不同的行為。 介面 (interface)<br>•@Component: 標識一個元件類，表示這個類會被 Spring 管理。<br>•@Autowired: 標識一個屬性或者方法，表示這個屬性或方法需要被自動裝配。<br>•@Service: 標識一個服務類。<br>•@Repository: 標識一個資料訪問類。<br>•@Controller: 標識一個控制器類。<br>•@Value: 標識一個屬性，表示這個屬性的值從設定檔中讀取。<br>•@RequestMapping: 標識一個方法或類，表示這個方法或類處理特定的 HTTP 請求。<br>•@Transactional: 標識一個方法或類，表示這個方法或類的所有操作都應該在事務中進行。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>John Doe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://neiltu.github.io/linkneil/2023/03/14/007_Design%20patterns/">https://neiltu.github.io/linkneil/2023/03/14/007_Design%20patterns/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/linkneil/tags/Design-patterns/"># Design patterns</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/linkneil/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/linkneil/2023/03/15/008_Software%20development%20life%20cycle/">Software development life cycle</a>
+            
+            
+            <a class="next" rel="next" href="/linkneil/2023/03/12/006_Waterfall%20vs%20Agile/">Waterfall vs Agile</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© John Doe | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

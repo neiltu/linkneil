@@ -40,7 +40,44 @@
 
     
     
-        
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
     
 
 
@@ -221,23 +258,12 @@
         </header>
 
         <div class="post-content">
-            <h2 id="Development-mode"><a href="#Development-mode" class="headerlink" title="Development mode"></a>Development mode</h2><h3 id="釋瀑布式開發與敏捷式開發"><a href="#釋瀑布式開發與敏捷式開發" class="headerlink" title="釋瀑布式開發與敏捷式開發?"></a>釋瀑布式開發與敏捷式開發?</h3><pre><code>瀑布式開發 (Waterfall Development) 是一種傳統的軟體開發模型，其按照順序依次進行需求分析、設計、實現、測試、維護等步驟。在瀑布式開發中，各個步驟之間相互獨立，並且每個步驟都必須在上一步驟完成之後才能開始。
-
-而敏捷式開發 (Agile Development)是一種新的軟體開發方法，其將開發過程分為反覆運算、短期的工作階段。敏捷開發重視快速反覆運算、小步前進、與客戶的密切合作，其主要理念是在短期內發布最小可行產品，然後根據用戶的反饋和需求，逐步優化和完善軟體。
-
-敏捷開發主要有Scrum，XP, Lean Development 三種方法
-    Scrum 是一種流行的敏捷開發框架，它主要用於軟體和產品的開發。Scrum 提供了一種透明的、羽量級的方法來管理和控制複雜的專案。Scrum 的核心要素包括一組產品的“特性”、“小組”和“規則”。
-    
-    XP (eXtreme Programming) 是一種流行的敏捷開發方法，它主要用於軟體發展。XP 的核心原則包括小步前進、對客戶的高度關注、對編碼的高度關注、對品質的高度關注以及對團隊的高度關注。
-    
-    Lean Development 是敏捷開發的另一種流行方法，它受到 Lean Manufacturing（精益生產）和 Toyota Production System 的啟發。主要思想就是將生產中不必要的浪費，如過量生產、庫存等，剔除。最小化生產過程中的浪費，最大化生產的效率
-        - 正確的說法是 Scrum 中的規則包括 Sprints, Daily Scrum, Sprint Planning, Sprint Review, Sprint Retrospective 五個過程。
-        1. Sprints:是Scrum中的反覆運算週期，通常持續1-4周的時間,在這個時間週期內，團隊會完成一組特定的工作。
-        2. Daily Scrum: 每天的短暫會議,在這個會議上,團隊成員會更新彼此對工作的進度,分享阻礙工作進展的問題以及明確下一步的行動。
-        3. Sprint Planning: Sprint計畫會議，在這個會議上，團隊成員會討論和確定下一個Sprint中會完成哪些特性。
-        4. Sprint Review: Sprint評審會議，在這個會議上，團隊成員會展示和評審上個Sprint完成的工作。
-        5. Sprint Retrospective: Sprint回顧會議，在這個會議上，團隊成員會總結上個Sprint的經驗教訓，並討論如何改進。
-</code></pre>
+            <h2 id="Development-mode"><a href="#Development-mode" class="headerlink" title="Development mode"></a>Development mode</h2><p>釋瀑布式開發與敏捷式開發?</p>
+<h3 id="瀑布式開發-Waterfall-Development"><a href="#瀑布式開發-Waterfall-Development" class="headerlink" title="瀑布式開發 (Waterfall Development)"></a>瀑布式開發 (Waterfall Development)</h3><p>是一種傳統的軟體開發模型，其按照順序依次進行需求分析、設計、實現、測試、維護等步驟。在瀑布式開發中，各個步驟之間相互獨立，並且每個步驟都必須在上一步驟完成之後才能開始。</p>
+<h3 id="敏捷式開發-Agile-Development"><a href="#敏捷式開發-Agile-Development" class="headerlink" title="敏捷式開發 (Agile Development)"></a>敏捷式開發 (Agile Development)</h3><p>是一種新的軟體開發方法，其將開發過程分為反覆運算、短期的工作階段。敏捷開發重視快速反覆運算、小步前進、與客戶的密切合作，其主要理念是在短期內發布最小可行產品，然後根據用戶的反饋和需求，逐步優化和完善軟體。</p>
+<p>敏捷開發主要有Scrum，XP, Lean Development 三種方法<br>Scrum 是一種流行的敏捷開發框架，它主要用於軟體和產品的開發。Scrum 提供了一種透明的、羽量級的方法來管理和控制複雜的專案。Scrum 的核心要素包括一組產品的“特性”、“小組”和“規則”。</p>
+<p>XP (eXtreme Programming) 是一種流行的敏捷開發方法，它主要用於軟體發展。XP 的核心原則包括小步前進、對客戶的高度關注、對編碼的高度關注、對品質的高度關注以及對團隊的高度關注。</p>
+<p>Lean Development 是敏捷開發的另一種流行方法，它受到 Lean Manufacturing（精益生產）和 Toyota Production System 的啟發。主要思想就是將生產中不必要的浪費，如過量生產、庫存等，剔除。最小化生產過程中的浪費，最大化生產的效率<br>    正確的說法是 Scrum 中的規則包括 Sprints, Daily Scrum, Sprint Planning, Sprint Review, Sprint Retrospective 五個過程。<br>    1. Sprints:是Scrum中的反覆運算週期，通常持續1-4周的時間,在這個時間週期內，團隊會完成一組特定的工作。<br>    2. Daily Scrum: 每天的短暫會議,在這個會議上,團隊成員會更新彼此對工作的進度,分享阻礙工作進展的問題以及明確下一步的行動。<br>    3. Sprint Planning: Sprint計畫會議，在這個會議上，團隊成員會討論和確定下一個Sprint中會完成哪些特性。<br>    4. Sprint Review: Sprint評審會議，在這個會議上，團隊成員會展示和評審上個Sprint完成的工作。<br>    5. Sprint Retrospective: Sprint回顧會議，在這個會議上，團隊成員會總結上個Sprint的經驗教訓，並討論如何改進。</p>
 
         </div>
 
@@ -288,6 +314,8 @@
             </div>
         </section>
         <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/linkneil/2023/03/14/007_Design%20patterns/">Design patterns</a>
             
             
             <a class="next" rel="next" href="/linkneil/2023/03/11/005_Java/">Java Basics</a>

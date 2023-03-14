@@ -40,7 +40,44 @@
 
     
     
-        
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
     
 
 
@@ -205,14 +242,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">March 10, 2023&nbsp;&nbsp;14:00:00</a>
+                        Date: <a href="#">March 10, 2023&nbsp;&nbsp;22:31:00</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/linkneil/categories/Basic/">Basic</a>
+                                <a href="/linkneil/categories/Basic-Java/">Basic(Java)</a>
                             
                         </span>
                     
@@ -223,7 +260,7 @@
         <div class="post-content">
             <h2 id="Simple-question-and-answer"><a href="#Simple-question-and-answer" class="headerlink" title="Simple question and answer"></a>Simple question and answer</h2><h3 id="spring-amp-springboot-框架"><a href="#spring-amp-springboot-框架" class="headerlink" title="spring &amp; springboot 框架"></a>spring &amp; springboot 框架</h3><p>spring是輕量級的Java框架，非侵入式，框架api業務邏輯<br>spring 容器，透過設定去管理物件生命週期<br>IOC控制反轉，依賴注入，不必寫很多關聯，需再注入就可以<br>AOP，記錄安全交易，需要再縫入，跟業務邏輯分開的<br>springboot將複雜簡化，不用過多繁雜的xml配置，注入即用</p>
 <h3 id="Spring-RestController-amp-Controller差異"><a href="#Spring-RestController-amp-Controller差異" class="headerlink" title="Spring RestController &amp; Controller差異?"></a>Spring RestController &amp; Controller差異?</h3><p>@RestController &#x3D; @Controller + @ResponseBody，@Controller表明該類內的所有方法預設返回頁面，@ResponseBody的方法返回資料，寫入HTTP response body</p>
-<h3 id="請問Java-ORM相關技術為何"><a href="#請問Java-ORM相關技術為何" class="headerlink" title="請問Java ORM相關技術為何?"></a>請問Java ORM相關技術為何?</h3><p>以前使用是Hibernate透過xml才進行，現在使用JPA透過@來進行。</p>
+<h3 id="Java-ORM相關技術為何"><a href="#Java-ORM相關技術為何" class="headerlink" title="Java ORM相關技術為何?"></a>Java ORM相關技術為何?</h3><p>以前使用是Hibernate透過xml才進行，現在使用JPA透過@來進行。</p>
 <h3 id="是否使用過AOP技術"><a href="#是否使用過AOP技術" class="headerlink" title="是否使用過AOP技術?"></a>是否使用過AOP技術?</h3><p>我使用過 AOP 技術。例如在專案中使用 Spring AOP 實現日誌記錄和權限驗證。</p>
 <h3 id="請問呼叫API是否有再進行身份驗證"><a href="#請問呼叫API是否有再進行身份驗證" class="headerlink" title="請問呼叫API是否有再進行身份驗證?"></a>請問呼叫API是否有再進行身份驗證?</h3><p>API 時可以使用身份驗證方式如 OAuth 2.0, JWT token, API key等。例如使用 OAuth 2.0 實現API授權，保證只有授權的用戶才能存取資源。</p>
 <h3 id="複習singleton"><a href="#複習singleton" class="headerlink" title="複習singleton"></a>複習singleton</h3><ol>
@@ -235,6 +272,11 @@
 <li>Queue 是 Java 中的一種實現了 Queue 介面的類，它提供了先進先出（FIFO）的數據結構。這種類型的數據結構可以用於實現任務排序，消息傳遞等。</li>
 <li>LinkedList 是 Java 中的一種實現了 List 介面的類，它使用鏈結串列來存儲元素。它可以在鏈結串列的開頭和結尾快速插入和刪除元素，並且支援隨機存取。</li>
 </ol>
+<h3 id="Java的Spring-and-Hibernate"><a href="#Java的Spring-and-Hibernate" class="headerlink" title="Java的Spring and Hibernate"></a>Java的Spring and Hibernate</h3><p>Spring是一個開源的Java框架，它主要用於簡化Java企業級應用程式的開發。Spring框架提供了一組工具和技術，用於管理應用程式中的物件，包括依賴注入和面向切面程式設計。Spring框架還提供了對資料訪問、事務管理、Web應用程式開發等方面的支援。<br>Hibernate 是一個開源的Java持久層框架。它提供了一組工具和API，用於將Java物件映射到關聯式資料庫中。Hibernate可以説明開發人員更輕鬆地處理資料庫的增刪改查操作，減少手工編寫的SQL語句的工作量。<br>Spring和Hibernate是配合使用的，Spring框架提供了整合Hibernate的工具。這使得開發人員可以使用Spring提供的面向切面程式設計和依賴注入等功能來管理Hibernate的會話和事務。 這樣可以更方便的管理資料庫操作，提高開發效率和系統可維護性。</p>
+<h3 id="Java的SNMP"><a href="#Java的SNMP" class="headerlink" title="Java的SNMP"></a>Java的SNMP</h3><p>SNMP (Simple Network Management Protocol) 是一種網路管理協定，它用於在網路中監控和管理網路設備。SNMP使用UDP協定傳輸資料，並使用MIB(Management Information Base)來存儲管理資訊。<br>SNMP具有三個主要元件：<br>o	SNMP代理: 運行在網路設備上的軟體，用於收集和報告網路狀態資訊。<br>o	SNMP管理系統: 用於監控和管理網路的軟體。<br>o	SNMP管理端: 用於發送請求和接收回應的軟體或設備。<br>在Java平臺上，有許多協力廠商庫來支持SNMP的使用，比如 SNMP4J, JSNMP, 也可以使用Java類庫中的SNMP類進行簡單的SNMP操作。這些庫可以方便的使用SNMP協定進行網路監控和管理。</p>
+<h3 id="Java的SQL"><a href="#Java的SQL" class="headerlink" title="Java的SQL"></a>Java的SQL</h3><p>SQL (Structured Query Language) 是一種用於管理關係型數據庫的語言。它用於查詢、更新和管理資料庫中的資料。SQL語句包括CREATE、SELECT、INSERT、UPDATE、DELETE等指令。<br>Java可以通過JDBC(Java Database Connectivity) API來訪問資料庫。 JDBC API 是一組Java類和介面，用於執行SQL語句並與資料庫交互。開發人員可以使用JDBC API在Java程式中執行SQL語句，並處理返回的資料。<br>還有其他很多關係型數據庫對應的ORM框架，比如Hibernate、MyBatis等，它們可以在Java程式中訪問資料庫，並使用物件導向的方式處理資料。這樣可以避免編寫複雜的SQL語句，增加程式的可讀性和可維護性。<br>SDLC (Software Development Life Cycle) 是軟體開發生命週期的縮寫。它是軟體開發過程中的一種模型，描述了軟體產品從需求分析、設計、實現、測試、部署、維護等各個階段的活動。</p>
+<h3 id="System-Development-Life-Cycle-SDLC模型-："><a href="#System-Development-Life-Cycle-SDLC模型-：" class="headerlink" title="System Development Life Cycle(SDLC模型)："></a>System Development Life Cycle(SDLC模型)：</h3><p>•	水準式模型 (Linear Model)<br>•	迴圈式模型 (Iterative Model)<br>•	敏捷模型 (Agile Model)<br>•	V-Model<br>每種模型都有自己的特點，依照項目的需求選擇適當的模型即可。<br>簡單來說，SDLC是一個軟體開發過程的架構，涵蓋了軟體開發的從需求分析到維護的全過程，藉此確保軟體的順暢開發和高效率運作。</p>
+<h3 id="Java的SOAP-REST-XML-JSON"><a href="#Java的SOAP-REST-XML-JSON" class="headerlink" title="Java的SOAP, REST, XML, JSON"></a>Java的SOAP, REST, XML, JSON</h3><p>SOAP (Simple Object Access Protocol) 是一種常用的互聯網通信協議。它用於在不同系統之間進行通信，通過XML格式來傳輸資料。SOAP提供了一種統一的方法來進行遠端調用（RPC），並支援應用層協議，如HTTP和SMTP。<br>REST (Representational State Transfer) 是一種軟體架構風格，用於構建互聯網應用程式。它提倡使用現有的HTTP方法（如GET、POST、PUT、DELETE等）來實現系統間的交互，並通過資源的URL來指定要操作的資料。REST通常使用JSON格式來傳輸資料，因為它比XML更羽量級。<br>XML (eXtensible Markup Language) 是一種常用的資料格式，用於在不同系統之間進行通信。XML格式由標記組成，可以描述資料的結構和屬性。XML可以用來傳輸各種各樣的資料，包括文本、圖像和音訊等。<br>JSON (JavaScript Object Notation) 是一種羽量級的資料交換格式。它是基於JavaScript物件的一個子集，因此可以使用JavaScript來解析和生成JSON資料。JSON比XML更簡潔易讀，且傳送速率更快。 JSON通常用於Web應用程式中的Ajax請求和RESTful Web服務之間的資料交換。</p>
 
         </div>
 
