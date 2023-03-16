@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+<title>doPost servlet | Hexo</title>
+
+
+
+    <link rel="icon" href="/linkneil/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/linkneil/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/linkneil/js/script.js"></script>
+    
+    <script src="/linkneil/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/linkneil/">Bentham&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/linkneil/archives">Posts</a>
+                
+                    <a class="menu-item" href="/linkneil/category">Categories</a>
+                
+                    <a class="menu-item" href="/linkneil/tag">Tags</a>
+                
+                    <a class="menu-item" href="/linkneil/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/linkneil/">Bentham&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/linkneil/archives">Posts</a>
+                
+                    <a class="menu-item" href="/linkneil/category">Categories</a>
+                
+                    <a class="menu-item" href="/linkneil/tag">Tags</a>
+                
+                    <a class="menu-item" href="/linkneil/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">doPost servlet</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">John Doe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 23, 2023&nbsp;&nbsp;19:47:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/linkneil/categories/Practice/">Practice</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id=""><a href="#" class="headerlink" title=""></a></h2><p>Java實作程式ajax post josn練習，前端使用ajax實作，前端會有下拉選單是 type1&amp;type2，後端請用servlet用doPost方法串接，並再servlet class當中回傳json物件到前端。</p>
+<h3 id="前端程式碼-使用jQuery"><a href="#前端程式碼-使用jQuery" class="headerlink" title="前端程式碼 (使用jQuery)"></a>前端程式碼 (使用jQuery)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    $(document).ready(function()&#123;</span><br><span class="line">        $(&quot;#typeSelect&quot;).change(function()&#123;</span><br><span class="line">            var type = $(this).val();</span><br><span class="line">            $.ajax(&#123;</span><br><span class="line">                type: &quot;POST&quot;,</span><br><span class="line">                url: &quot;MyServlet&quot;,</span><br><span class="line">                data: &#123;type: type&#125;,</span><br><span class="line">                dataType: &quot;json&quot;,</span><br><span class="line">                success: function(response)&#123;</span><br><span class="line">                    console.log(response);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;select id=&quot;typeSelect&quot;&gt;</span><br><span class="line">        &lt;option value=&quot;type1&quot;&gt;Type 1&lt;/option&gt;</span><br><span class="line">        &lt;option value=&quot;type2&quot;&gt;Type 2&lt;/option&gt;</span><br><span class="line">    &lt;/select&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="後端程式碼-使用servlet"><a href="#後端程式碼-使用servlet" class="headerlink" title="後端程式碼 (使用servlet):"></a>後端程式碼 (使用servlet):</h3><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.<span class="property">io</span>.<span class="property">IOException</span>;</span><br><span class="line"><span class="keyword">import</span> java.<span class="property">io</span>.<span class="property">PrintWriter</span>;</span><br><span class="line"><span class="keyword">import</span> java.<span class="property">util</span>.<span class="property">ArrayList</span>;</span><br><span class="line"><span class="keyword">import</span> java.<span class="property">util</span>.<span class="property">List</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.<span class="property">servlet</span>.<span class="property">ServletException</span>;</span><br><span class="line"><span class="keyword">import</span> javax.<span class="property">servlet</span>.<span class="property">annotation</span>.<span class="property">WebServlet</span>;</span><br><span class="line"><span class="keyword">import</span> javax.<span class="property">servlet</span>.<span class="property">http</span>.<span class="property">HttpServlet</span>;</span><br><span class="line"><span class="keyword">import</span> javax.<span class="property">servlet</span>.<span class="property">http</span>.<span class="property">HttpServletRequest</span>;</span><br><span class="line"><span class="keyword">import</span> javax.<span class="property">servlet</span>.<span class="property">http</span>.<span class="property">HttpServletResponse</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//import com.google.gson.Gson;</span></span><br><span class="line"><span class="keyword">import</span> org.<span class="property">json</span>.<span class="property">JSONArray</span>;</span><br><span class="line"></span><br><span class="line">@<span class="title class_">WebServlet</span>(<span class="string">&quot;/MyServlet&quot;</span>)</span><br><span class="line">public <span class="keyword">class</span> <span class="title class_">MyServlet</span> <span class="keyword">extends</span> <span class="title class_ inherited__">HttpServlet</span> &#123;</span><br><span class="line">  protected <span class="keyword">void</span> <span class="title function_">doPost</span>(<span class="title class_">HttpServletRequest</span> request, <span class="title class_">HttpServletResponse</span> response) throws <span class="title class_">ServletException</span>, <span class="title class_">IOException</span> &#123;</span><br><span class="line">    <span class="title class_">String</span> type = request.<span class="title function_">getParameter</span>(<span class="string">&quot;type&quot;</span>);</span><br><span class="line">    <span class="title class_">List</span> &lt; <span class="title class_">String</span> &gt; data = <span class="keyword">new</span> <span class="title class_">ArrayList</span> &lt; <span class="title class_">String</span> &gt; ();</span><br><span class="line">    <span class="keyword">if</span> (type.<span class="title function_">equals</span>(<span class="string">&quot;type1&quot;</span>)) &#123;</span><br><span class="line">      data.<span class="title function_">add</span>(<span class="string">&quot;item1&quot;</span>);</span><br><span class="line">      data.<span class="title function_">add</span>(<span class="string">&quot;item2&quot;</span>);</span><br><span class="line">      data.<span class="title function_">add</span>(<span class="string">&quot;item3&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (type.<span class="title function_">equals</span>(<span class="string">&quot;type2&quot;</span>)) &#123;</span><br><span class="line">      data.<span class="title function_">add</span>(<span class="string">&quot;item4&quot;</span>);</span><br><span class="line">      data.<span class="title function_">add</span>(<span class="string">&quot;item5&quot;</span>);</span><br><span class="line">      data.<span class="title function_">add</span>(<span class="string">&quot;item6&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//String json = new Gson().toJson(data);</span></span><br><span class="line">		<span class="title class_">JSON</span><span class="built_in">Array</span> jsonArray = <span class="keyword">new</span> <span class="title class_">JSON</span><span class="built_in">Array</span>(data);</span><br><span class="line">    <span class="title class_">String</span> json = jsonArray.<span class="title function_">toString</span>();</span><br><span class="line">    response.<span class="title function_">setContentType</span>(<span class="string">&quot;application/json&quot;</span>);</span><br><span class="line">    response.<span class="title function_">setCharacterEncoding</span>(<span class="string">&quot;UTF-8&quot;</span>);</span><br><span class="line">    <span class="title class_">PrintWriter</span> out = response.<span class="title function_">getWriter</span>();</span><br><span class="line">    out.<span class="title function_">print</span>(json);</span><br><span class="line">    out.<span class="title function_">flush</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">import java.io.IOException;</span><br><span class="line">import java.io.PrintWriter;</span><br><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line">import javax.servlet.ServletException;</span><br><span class="line">import javax.servlet.annotation.WebServlet;</span><br><span class="line">import javax.servlet.http.HttpServlet;</span><br><span class="line">import javax.servlet.http.HttpServletRequest;</span><br><span class="line">import javax.servlet.http.HttpServletResponse;</span><br><span class="line"></span><br><span class="line">//import com.google.gson.Gson;</span><br><span class="line">import org.json.JSONArray;</span><br><span class="line"></span><br><span class="line">@WebServlet(&quot;/MyServlet&quot;)</span><br><span class="line">public class MyServlet extends HttpServlet &#123;</span><br><span class="line">  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;</span><br><span class="line">    String type = request.getParameter(&quot;type&quot;);</span><br><span class="line">    List &lt; String &gt; data = new ArrayList &lt; String &gt; ();</span><br><span class="line">    if (type.equals(&quot;type1&quot;)) &#123;</span><br><span class="line">      data.add(&quot;item1&quot;);</span><br><span class="line">      data.add(&quot;item2&quot;);</span><br><span class="line">      data.add(&quot;item3&quot;);</span><br><span class="line">    &#125; else if (type.equals(&quot;type2&quot;)) &#123;</span><br><span class="line">      data.add(&quot;item4&quot;);</span><br><span class="line">      data.add(&quot;item5&quot;);</span><br><span class="line">      data.add(&quot;item6&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    //String json = new Gson().toJson(data);</span><br><span class="line">	JSONArray jsonArray = new JSONArray(data);</span><br><span class="line">    String json = jsonArray.toString();</span><br><span class="line">    response.setContentType(&quot;application/json&quot;);</span><br><span class="line">    response.setCharacterEncoding(&quot;UTF-8&quot;);</span><br><span class="line">    PrintWriter out = response.getWriter();</span><br><span class="line">    out.print(json);</span><br><span class="line">    out.flush();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="資料庫設定"><a href="#資料庫設定" class="headerlink" title="資料庫設定"></a>資料庫設定</h3><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//載入資料庫驅動程式</span></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="title class_">Class</span>.<span class="title function_">forName</span>(<span class="string">&quot;com.mysql.jdbc.Driver&quot;</span>);</span><br><span class="line">&#125; <span class="keyword">catch</span> (<span class="title class_">ClassNotFoundException</span> e) &#123;</span><br><span class="line">    e.<span class="title function_">printStackTrace</span>();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//建立與資料庫的連接</span></span><br><span class="line"><span class="title class_">Connection</span> conn = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    conn = <span class="title class_">DriverManager</span>.<span class="title function_">getConnection</span>(<span class="string">&quot;jdbc:mysql://hostname:port/dbname&quot;</span>,<span class="string">&quot;username&quot;</span>,<span class="string">&quot;password&quot;</span>);</span><br><span class="line">&#125; <span class="keyword">catch</span> (<span class="title class_">SQLException</span> e) &#123;</span><br><span class="line">    e.<span class="title function_">printStackTrace</span>();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//使用資料庫連接執行查詢</span></span><br><span class="line"><span class="title class_">String</span> sql = <span class="string">&quot;SELECT * FROM table_name WHERE type = ?&quot;</span>;</span><br><span class="line"><span class="title class_">PreparedStatement</span> pstmt = conn.<span class="title function_">prepareStatement</span>(sql);</span><br><span class="line">pstmt.<span class="title function_">setString</span>(<span class="number">1</span>, type);</span><br><span class="line"><span class="title class_">ResultSet</span> rs = pstmt.<span class="title function_">executeQuery</span>();</span><br><span class="line"><span class="comment">//將查詢結果轉換成json格式並回傳到前端</span></span><br><span class="line"><span class="title class_">List</span>&lt;<span class="title class_">String</span>&gt; data = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;<span class="title class_">String</span>&gt;();</span><br><span class="line"><span class="keyword">while</span> (rs.<span class="title function_">next</span>()) &#123;</span><br><span class="line">    data.<span class="title function_">add</span>(rs.<span class="title function_">getString</span>(<span class="string">&quot;column_name&quot;</span>));</span><br><span class="line">&#125;</span><br><span class="line"><span class="title class_">String</span> json = <span class="keyword">new</span> <span class="title class_">Gson</span>().<span class="title function_">toJson</span>(data);</span><br><span class="line">response.<span class="title function_">setContentType</span>(<span class="string">&quot;application/json&quot;</span>);</span><br><span class="line">response.<span class="title function_">setCharacterEncoding</span>(<span class="string">&quot;UTF-8&quot;</span>);</span><br><span class="line"><span class="title class_">PrintWriter</span> out = response.<span class="title function_">getWriter</span>();</span><br><span class="line">out.<span class="title function_">print</span>(json);</span><br><span class="line">out.<span class="title function_">flush</span>();</span><br></pre></td></tr></table></figure>
+
+<h3 id="測試url"><a href="#測試url" class="headerlink" title="測試url"></a>測試url</h3><p><strong><a target="_blank" rel="noopener" href="http://localhost:8080/MyWebApp/MyServlet?type=type1">http://localhost:8080/MyWebApp/MyServlet?type=type1</a></strong></p>
+<p>curl test</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST -H &quot;Content-Type: application/x-www-form-urlencoded&quot; -d &quot;type=type1&quot; http://localhost:8080/MyWebApp/MyServlet</span><br></pre></td></tr></table></figure>
+
+<p>X 參數 是設定方法<br>H 參數是設定header<br>d 參數是設定請求體</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>John Doe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://neiltu.github.io/linkneil/2023/03/23/017_doPost%20servlet/">https://neiltu.github.io/linkneil/2023/03/23/017_doPost%20servlet/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/linkneil/tags/Servlet/"># Servlet</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/linkneil/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/linkneil/2023/03/24/018_multi-thread%20readwrite/">multi-thread read/write</a>
+            
+            
+            <a class="next" rel="next" href="/linkneil/2023/03/22/016_Thread%20Pool/">Thread Pool</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© John Doe | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

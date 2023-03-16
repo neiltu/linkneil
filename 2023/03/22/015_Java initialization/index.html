@@ -13,7 +13,7 @@
 
 
 
-<title>Spring Boot Security | Hexo</title>
+<title>Java initialization | Hexo</title>
 
 
 
@@ -233,7 +233,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">Spring Boot Security</h1>
+            <h1 class="post-title">Java initialization</h1>
             
                 <div class="post-meta">
                     
@@ -242,14 +242,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">March 21, 2023&nbsp;&nbsp;1:01:00</a>
+                        Date: <a href="#">March 22, 2023&nbsp;&nbsp;19:42:00</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/linkneil/categories/Java/">Java</a>
+                                <a href="/linkneil/categories/Basic-Java/">Basic(Java)</a>
                             
                         </span>
                     
@@ -258,18 +258,22 @@
         </header>
 
         <div class="post-content">
-            <h2 id="Spring-Boot-Security-範例"><a href="#Spring-Boot-Security-範例" class="headerlink" title="Spring Boot Security 範例"></a>Spring Boot Security 範例</h2><p>Spring Boot Security是基於Spring Boot的安全框架，它提供了一個簡單而又強大的方式來保護應用程序，包括身份驗證、授權和攔截器等。Spring Boot Security基於Spring Security，通過Spring Boot的自動配置和開箱即用的特性，簡化了Spring Security的配置和使用。<br>以下是一個Spring Boot Security的範例：</p>
-<h3 id="在pom-xml中添加以下依賴："><a href="#在pom-xml中添加以下依賴：" class="headerlink" title="在pom.xml中添加以下依賴："></a>在pom.xml中添加以下依賴：</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>這樣就引入了Spring Boot Security的相關依賴。</p>
-<h3 id="application-properties配置"><a href="#application-properties配置" class="headerlink" title="application.properties配置"></a>application.properties配置</h3><p>接著，在application.properties中配置安全性資訊，例如使用者名稱、密碼、角色等：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">spring.security.user.name=admin</span><br><span class="line">spring.security.user.password=admin123</span><br><span class="line">spring.security.user.roles=ADMIN</span><br></pre></td></tr></table></figure>
-<h3 id="配置類中使用-EnableWebSecurity注解啟用Web安全性："><a href="#配置類中使用-EnableWebSecurity注解啟用Web安全性：" class="headerlink" title="配置類中使用@EnableWebSecurity注解啟用Web安全性："></a>配置類中使用@EnableWebSecurity注解啟用Web安全性：</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Configuration </span><br><span class="line">@EnableWebSecurity </span><br><span class="line">public class WebSecurityConfig extends WebSecurityConfigurerAdapter &#123; </span><br><span class="line">    @Override </span><br><span class="line">    protected void configure(HttpSecurity http) throws Exception &#123; </span><br><span class="line">        http.authorizeRequests() .antMatchers(&quot;/admin/**&quot;).hasRole(&quot;ADMIN&quot;).anyRequest().authenticated() .and() .formLogin() .and() .logout().logoutSuccessUrl(&quot;/&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+            <h2 id="Java-initialization-範例"><a href="#Java-initialization-範例" class="headerlink" title="Java initialization 範例"></a>Java initialization 範例</h2><p>Java initialization 是指在使用變數之前對其進行初始化的過程。在 Java 中，變數可以通過以下幾種方式進行初始化：</p>
+<h3 id="直接賦值"><a href="#直接賦值" class="headerlink" title="直接賦值"></a>直接賦值</h3><p>使用等號直接給變數賦值。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int x = 10;</span><br></pre></td></tr></table></figure>
+<h3 id="構造函數初始化"><a href="#構造函數初始化" class="headerlink" title="構造函數初始化"></a>構造函數初始化</h3><p>在創建對象時，使用構造函數對實例變數進行初始化。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public class Person &#123; </span><br><span class="line">    private String name; </span><br><span class="line">    private int age; </span><br><span class="line">    public Person(String name, int age) &#123; </span><br><span class="line">        this.name = name; this.age = age; </span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br><span class="line">Person p = new Person(&quot;John&quot;, 30);</span><br></pre></td></tr></table></figure>
 
-<p>在上面的代碼中，使用了configure()方法配置安全性規則，限制只有擁有ADMIN角色的使用者才能訪問&#x2F;admin下的所有URL，其他URL需要驗證身份。使用formLogin()方法啟用表單登錄，logout()方法啟用登出功能。</p>
-<p>最後，在Controller中添加一個&#x2F;admin的請求映射：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@RestController </span><br><span class="line">public class MyController &#123; </span><br><span class="line">    @GetMapping(&quot;/admin&quot;) </span><br><span class="line">    public String admin() &#123;</span><br><span class="line">        return &quot;Hello Admin!&quot;; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="靜態初始化區塊"><a href="#靜態初始化區塊" class="headerlink" title="靜態初始化區塊"></a>靜態初始化區塊</h3><p>在類別中使用靜態初始化區塊進行初始化。靜態初始化區塊會在類別加載時執行，且只執行一次。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public class MyClass &#123; </span><br><span class="line">    private static int x; </span><br><span class="line">    static &#123; x = 10; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>在上面的代碼中，&#x2F;admin映射到MyController的admin()方法，只有擁有ADMIN角色的使用者才能訪問這個URL。<br>經過以上配置，Spring Boot Security可以保護應用程序，確保只有經過身份驗證並授權的使用者才能訪問受保護的URL，從而保護應用程序的安全性。</p>
+<h3 id="非靜態初始化區塊"><a href="#非靜態初始化區塊" class="headerlink" title="非靜態初始化區塊"></a>非靜態初始化區塊</h3><p>在類別中使用非靜態初始化區塊進行初始化。非靜態初始化區塊會在每次創建對象時執行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public class MyClass &#123; </span><br><span class="line">    private int x; &#123; x = 10; &#125;</span><br><span class="line">&#125; </span><br><span class="line">MyClass mc = new MyClass();</span><br></pre></td></tr></table></figure>
+
+<h3 id="匿名初始化"><a href="#匿名初始化" class="headerlink" title="匿名初始化"></a>匿名初始化</h3><p>將初始化表達式放在變數聲明後的花括號中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int[] arr = &#123;1, 2, 3&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>以上是 Java 中變數初始化的常用方式。在使用變數之前，需要確保變數已經進行了初始化，否則編譯器會報錯。</p>
 
         </div>
 
@@ -284,7 +288,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://neiltu.github.io/linkneil/2023/03/21/013_Spring%20Boot%20Security/">https://neiltu.github.io/linkneil/2023/03/21/013_Spring%20Boot%20Security/</a></span>
+                        <span><a href="https://neiltu.github.io/linkneil/2023/03/22/015_Java%20initialization/">https://neiltu.github.io/linkneil/2023/03/22/015_Java%20initialization/</a></span>
                     </p>
                 
                 
@@ -308,7 +312,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/linkneil/tags/Spring-Boot/"># Spring Boot</a>
+                        <a href="/linkneil/tags/initialization/"># initialization</a>
                     
                         
                 </span>
@@ -321,10 +325,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/linkneil/2023/03/22/015_Java%20initialization/">Java initialization</a>
+                <a class="prev" rel="prev" href="/linkneil/2023/03/22/016_Thread%20Pool/">Thread Pool</a>
             
             
-            <a class="next" rel="next" href="/linkneil/2023/03/20/014_Abstract%20Class%20vs%20Interface/">Abstract Class vs Interface</a>
+            <a class="next" rel="next" href="/linkneil/2023/03/21/013_Spring%20Boot%20Security/">Spring Boot Security</a>
             
         </section>
 

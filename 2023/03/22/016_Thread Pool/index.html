@@ -13,7 +13,7 @@
 
 
 
-<title>Spring Boot Security | Hexo</title>
+<title>Thread Pool | Hexo</title>
 
 
 
@@ -233,7 +233,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">Spring Boot Security</h1>
+            <h1 class="post-title">Thread Pool</h1>
             
                 <div class="post-meta">
                     
@@ -242,14 +242,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">March 21, 2023&nbsp;&nbsp;1:01:00</a>
+                        Date: <a href="#">March 22, 2023&nbsp;&nbsp;23:20:00</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/linkneil/categories/Java/">Java</a>
+                                <a href="/linkneil/categories/Basic-Java/">Basic(Java)</a>
                             
                         </span>
                     
@@ -258,19 +258,16 @@
         </header>
 
         <div class="post-content">
-            <h2 id="Spring-Boot-Security-範例"><a href="#Spring-Boot-Security-範例" class="headerlink" title="Spring Boot Security 範例"></a>Spring Boot Security 範例</h2><p>Spring Boot Security是基於Spring Boot的安全框架，它提供了一個簡單而又強大的方式來保護應用程序，包括身份驗證、授權和攔截器等。Spring Boot Security基於Spring Security，通過Spring Boot的自動配置和開箱即用的特性，簡化了Spring Security的配置和使用。<br>以下是一個Spring Boot Security的範例：</p>
-<h3 id="在pom-xml中添加以下依賴："><a href="#在pom-xml中添加以下依賴：" class="headerlink" title="在pom.xml中添加以下依賴："></a>在pom.xml中添加以下依賴：</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>這樣就引入了Spring Boot Security的相關依賴。</p>
-<h3 id="application-properties配置"><a href="#application-properties配置" class="headerlink" title="application.properties配置"></a>application.properties配置</h3><p>接著，在application.properties中配置安全性資訊，例如使用者名稱、密碼、角色等：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">spring.security.user.name=admin</span><br><span class="line">spring.security.user.password=admin123</span><br><span class="line">spring.security.user.roles=ADMIN</span><br></pre></td></tr></table></figure>
-<h3 id="配置類中使用-EnableWebSecurity注解啟用Web安全性："><a href="#配置類中使用-EnableWebSecurity注解啟用Web安全性：" class="headerlink" title="配置類中使用@EnableWebSecurity注解啟用Web安全性："></a>配置類中使用@EnableWebSecurity注解啟用Web安全性：</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Configuration </span><br><span class="line">@EnableWebSecurity </span><br><span class="line">public class WebSecurityConfig extends WebSecurityConfigurerAdapter &#123; </span><br><span class="line">    @Override </span><br><span class="line">    protected void configure(HttpSecurity http) throws Exception &#123; </span><br><span class="line">        http.authorizeRequests() .antMatchers(&quot;/admin/**&quot;).hasRole(&quot;ADMIN&quot;).anyRequest().authenticated() .and() .formLogin() .and() .logout().logoutSuccessUrl(&quot;/&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在上面的代碼中，使用了configure()方法配置安全性規則，限制只有擁有ADMIN角色的使用者才能訪問&#x2F;admin下的所有URL，其他URL需要驗證身份。使用formLogin()方法啟用表單登錄，logout()方法啟用登出功能。</p>
-<p>最後，在Controller中添加一個&#x2F;admin的請求映射：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@RestController </span><br><span class="line">public class MyController &#123; </span><br><span class="line">    @GetMapping(&quot;/admin&quot;) </span><br><span class="line">    public String admin() &#123;</span><br><span class="line">        return &quot;Hello Admin!&quot;; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>在上面的代碼中，&#x2F;admin映射到MyController的admin()方法，只有擁有ADMIN角色的使用者才能訪問這個URL。<br>經過以上配置，Spring Boot Security可以保護應用程序，確保只有經過身份驗證並授權的使用者才能訪問受保護的URL，從而保護應用程序的安全性。</p>
-
+            <h2 id="線程池的實現方式"><a href="#線程池的實現方式" class="headerlink" title="線程池的實現方式?"></a>線程池的實現方式?</h2><p>該代碼實現了一個固定大小的執行緒池，並向其提交了10個任務，每個任務都會類比一個1s的處理過程。最後，關閉了執行緒池。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">import java.util.concurrent.ExecutorService;</span><br><span class="line">import java.util.concurrent.Executors;</span><br><span class="line"></span><br><span class="line">public class ThreadPoolExample &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        // 創建一個固定大小的執行緒池</span><br><span class="line">        ExecutorService executorService = Executors.newFixedThreadPool(5);</span><br><span class="line"></span><br><span class="line">        // 提交10個任務到執行緒池中執行</span><br><span class="line">        for (int i = 0; i &lt; 10; i++) &#123;</span><br><span class="line">            executorService.submit(new Task(i));</span><br><span class="line">        &#125;</span><br><span class="line">        // 關閉執行緒池</span><br><span class="line">        executorService.shutdown();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static class Task implements Runnable &#123;</span><br><span class="line">        private int taskId;</span><br><span class="line"></span><br><span class="line">        public Task(int taskId) &#123;</span><br><span class="line">            this.taskId = taskId;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            // 列印當前執行緒名稱和任務編號</span><br><span class="line">            System.out.println(&quot;Task &quot; + taskId + &quot; is running in thread &quot; + Thread.currentThread().getName());</span><br><span class="line"></span><br><span class="line">            // 模擬任務的執行過程（耗時1s）</span><br><span class="line">            try &#123;</span><br><span class="line">                Thread.sleep(1000);</span><br><span class="line">            &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="步驟"><a href="#步驟" class="headerlink" title="步驟"></a>步驟</h3><p>“線程池的實現方式通常包括以下：</p>
+<ol>
+<li>創建線程池：創建一個線程池實例，並設置線程數量和任務佇列。</li>
+<li>提交任務：向線程池提交任務，等待線程池中的空閒線程處理任務。</li>
+<li>處理任務：線程池中的空閒線程會自動處理任務，並在任務完成後回收。</li>
+<li>關閉線程池：在不再需要線程池時，可以關閉線程池。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">import java.util.concurrent.ExecutorService;</span><br><span class="line">import java.util.concurrent.Executors;</span><br><span class="line"></span><br><span class="line">public class ThreadPoolExample &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        // 創建一個固定大小的線程池，並且設定線程數量為5</span><br><span class="line">        ExecutorService executor = Executors.newFixedThreadPool(5);</span><br><span class="line">        // 提交10個任務</span><br><span class="line">        for (int i = 0; i &lt; 10; i++) &#123;</span><br><span class="line">            // 創建一個工作線程</span><br><span class="line">            Runnable worker = new WorkerThread(&quot;&quot; + i);</span><br><span class="line">            // 將工作線程提交到線程池中</span><br><span class="line">            executor.execute(worker);</span><br><span class="line">        &#125;</span><br><span class="line">        // 關閉線程池，不再接受新的任務</span><br><span class="line">        executor.shutdown();</span><br><span class="line">        // 等待所有任務結束</span><br><span class="line">        while (!executor.isTerminated()) &#123;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(&quot;Finished all threads&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
         </div>
 
         
@@ -284,7 +281,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://neiltu.github.io/linkneil/2023/03/21/013_Spring%20Boot%20Security/">https://neiltu.github.io/linkneil/2023/03/21/013_Spring%20Boot%20Security/</a></span>
+                        <span><a href="https://neiltu.github.io/linkneil/2023/03/22/016_Thread%20Pool/">https://neiltu.github.io/linkneil/2023/03/22/016_Thread%20Pool/</a></span>
                     </p>
                 
                 
@@ -308,7 +305,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/linkneil/tags/Spring-Boot/"># Spring Boot</a>
+                        <a href="/linkneil/tags/Thread/"># Thread</a>
                     
                         
                 </span>
@@ -321,10 +318,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/linkneil/2023/03/22/015_Java%20initialization/">Java initialization</a>
+                <a class="prev" rel="prev" href="/linkneil/2023/03/23/017_doPost%20servlet/">doPost servlet</a>
             
             
-            <a class="next" rel="next" href="/linkneil/2023/03/20/014_Abstract%20Class%20vs%20Interface/">Abstract Class vs Interface</a>
+            <a class="next" rel="next" href="/linkneil/2023/03/22/015_Java%20initialization/">Java initialization</a>
             
         </section>
 
