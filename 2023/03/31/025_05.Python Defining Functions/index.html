@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Neil Tu">
+
+
+
+
+
+<title>05.Python Defining Functions定義函式 | Hexo</title>
+
+
+
+    <link rel="icon" href="/linkneil/favicon1.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/linkneil/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/linkneil/js/script.js"></script>
+    
+    <script src="/linkneil/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/linkneil/">Neil&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/linkneil/archives">Posts</a>
+                
+                    <a class="menu-item" href="/linkneil/category">Categories</a>
+                
+                    <a class="menu-item" href="/linkneil/tag">Tags</a>
+                
+                    <a class="menu-item" href="/linkneil/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/linkneil/">Neil&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/linkneil/archives">Posts</a>
+                
+                    <a class="menu-item" href="/linkneil/category">Categories</a>
+                
+                    <a class="menu-item" href="/linkneil/tag">Tags</a>
+                
+                    <a class="menu-item" href="/linkneil/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">05.Python Defining Functions定義函式</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Neil Tu</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 31, 2023&nbsp;&nbsp;22:01:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/linkneil/categories/Python-notes/">Python notes</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="Python-Defining-Functions定義函式"><a href="#Python-Defining-Functions定義函式" class="headerlink" title="Python Defining Functions定義函式"></a>Python Defining Functions定義函式</h2><h3 id="function費式數列"><a href="#function費式數列" class="headerlink" title="function費式數列"></a>function費式數列</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; def fib(n):    # write Fibonacci series up to n</span><br><span class="line">...     &quot;&quot;&quot;Print a Fibonacci series up to n.&quot;&quot;&quot;</span><br><span class="line">...     a, b = 0, 1</span><br><span class="line">...     while a &lt; n:</span><br><span class="line">...         print(a, end=&#x27; &#x27;)</span><br><span class="line">...         a, b = b, a+b</span><br><span class="line">...     print()</span><br><span class="line">...</span><br><span class="line">&gt;&gt;&gt; fib(20)</span><br><span class="line">0 1 1 2 3 5 8 13</span><br><span class="line">&gt;&gt;&gt; fib(200)</span><br><span class="line">0 1 1 2 3 5 8 13 21 34 55 89 144</span><br><span class="line">&gt;&gt;&gt; f = fib</span><br><span class="line">&gt;&gt;&gt; f(200)</span><br><span class="line">0 1 1 2 3 5 8 13 21 34 55 89 144</span><br></pre></td></tr></table></figure>
+<h3 id="預設引數值"><a href="#預設引數值" class="headerlink" title="預設引數值"></a>預設引數值</h3><p>定義ask_ok，使用上overwrite reminder</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; def ask_ok(prompt, retries=4, reminder=&#x27;Please try again!&#x27;):</span><br><span class="line">...     while True:</span><br><span class="line">...         ok = input(prompt)</span><br><span class="line">...         if ok in (&#x27;y&#x27;, &#x27;ye&#x27;, &#x27;yes&#x27;):</span><br><span class="line">...             return True</span><br><span class="line">...         if ok in (&#x27;n&#x27;, &#x27;no&#x27;, &#x27;nop&#x27;, &#x27;nope&#x27;):</span><br><span class="line">...             return False</span><br><span class="line">...         retries = retries - 1</span><br><span class="line">...         if retries &lt; 0:</span><br><span class="line">...             raise ValueError(&#x27;invalid user response&#x27;)</span><br><span class="line">...         print(reminder)</span><br><span class="line">...</span><br><span class="line">&gt;&gt;&gt; ask_ok(&#x27;OK to overwrite the file?&#x27;, 2, &#x27;Come on, only yes or no!&#x27;)</span><br><span class="line">OK to overwrite the file?haha</span><br><span class="line">Come on, only yes or no!</span><br><span class="line">OK to overwrite the file?yes</span><br><span class="line">True</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="關鍵字引數"><a href="#關鍵字引數" class="headerlink" title="關鍵字引數"></a>關鍵字引數</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; def parrot(voltage, state=&#x27;a stiff&#x27;, action=&#x27;voom&#x27;, type=&#x27;Norwegian Blue&#x27;):</span><br><span class="line">...     print(&quot;-- This parrot wouldn&#x27;t&quot;, action, end=&#x27; &#x27;)</span><br><span class="line">...     print(&quot;if you put&quot;, voltage, &quot;volts through it.&quot;)</span><br><span class="line">...     print(&quot;-- Lovely plumage, the&quot;, type)</span><br><span class="line">...     print(&quot;-- It&#x27;s&quot;, state, &quot;!&quot;)</span><br><span class="line">...</span><br><span class="line">&gt;&gt;&gt; parrot(100)</span><br><span class="line">-- This parrot wouldn&#x27;t voom if you put 100 volts through it.</span><br><span class="line">-- Lovely plumage, the Norwegian Blue</span><br><span class="line">-- It&#x27;s a stiff !</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">&gt;&gt;&gt; parrot(&#x27;a million&#x27;, &#x27;bereft of life&#x27;, &#x27;jump&#x27;)</span><br><span class="line">-- This parrot wouldn&#x27;t jump if you put a million volts through it.</span><br><span class="line">-- Lovely plumage, the Norwegian Blue</span><br><span class="line">-- It&#x27;s bereft of life !</span><br></pre></td></tr></table></figure>
+
+<h3 id="特殊參數"><a href="#特殊參數" class="headerlink" title="特殊參數"></a>特殊參數</h3><p>&#x2F;*先位置再關鍵字</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">def f(pos1, pos2, /, pos_or_kwd, *, kwd1, kwd2):</span><br></pre></td></tr></table></figure>
+<p>使用了Python 3中的新特性，稱為”位置參數” (positional-only parameters) 和 “關鍵字參數” (keyword-only parameters)的函數定義。</p>
+<p>在這個函數定義中，我們可以看到三種不同的參數形式：</p>
+<ol>
+<li>位置參數：在函數參數列表中以斜線 “&#x2F;“ 隔開的是位置參數。在調用函數時，這些參數只能按照它們在參數列表中的順序進行傳遞，而不能使用關鍵字傳遞。<br>在這個函數中，pos1和pos2是位置參數，可以按照它們在函數參數列表中的順序傳遞，而不能使用關鍵字傳遞。</li>
+<li>位置或關鍵字參數：在斜線之後，沒有星號 “*” 修飾的參數是”位置或關鍵字參數”。這意味著在調用函數時，可以按照位置或使用關鍵字進行傳遞。<br>在這個函數中，pos_or_kwd是一個位置或關鍵字參數。</li>
+<li>關鍵字參數：在星號 “*” 之後，是”關鍵字參數”，這些參數只能使用關鍵字進行傳遞，而不能按照位置進行傳遞。<br>在這個函數中，kwd1和kwd2是關鍵字參數。</li>
+</ol>
+<h3 id="任意引數列表-Arbitrary-Argument-Lists"><a href="#任意引數列表-Arbitrary-Argument-Lists" class="headerlink" title="任意引數列表 (Arbitrary Argument Lists)"></a>任意引數列表 (Arbitrary Argument Lists)</h3><p>*args 參數後面的任何參數必須是「僅限關鍵字」引數，意即它們只能作為關鍵字引數</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; def concat(*args, sep=&quot;/&quot;):</span><br><span class="line">...     return sep.join(args)</span><br><span class="line">...</span><br><span class="line">&gt;&gt;&gt; concat(&quot;earth&quot;, &quot;mars&quot;, &quot;venus&quot;)</span><br><span class="line">&#x27;earth/mars/venus&#x27;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Lambda-運算式"><a href="#Lambda-運算式" class="headerlink" title="Lambda 運算式"></a>Lambda 運算式</h3><p>lambda的功用主要包括：</p>
+<ol>
+<li>創建簡單的、單行的函數，這些函數可以用作其他函數的參數，如filter()和map()等內置函數。</li>
+<li>在不需要定義額外函數的情況下，傳遞函數作為參數。</li>
+<li>在選擇排序、快速排序等算法中，可用於對可比較的對象進行排序。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; pairs = [(1, &#x27;one&#x27;), (2, &#x27;two&#x27;), (3, &#x27;three&#x27;), (4, &#x27;four&#x27;)]</span><br><span class="line">&gt;&gt;&gt; pairs.sort(key=lambda pair: pair[1])</span><br><span class="line">&gt;&gt;&gt; pairs</span><br><span class="line">[(4, &#x27;four&#x27;), (1, &#x27;one&#x27;), (3, &#x27;three&#x27;), (2, &#x27;two&#x27;)]</span><br><span class="line">&gt;&gt;&gt; [(4, &#x27;four&#x27;), (1, &#x27;one&#x27;), (3, &#x27;three&#x27;), (2, &#x27;two&#x27;)]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>學習材料: <a target="_blank" rel="noopener" href="https://docs.python.org/zh-tw/3/tutorial/index.html">https://docs.python.org/zh-tw/3/tutorial/index.html</a></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Neil Tu</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://neiltu.github.io/linkneil/2023/03/31/025_05.Python%20Defining%20Functions/">https://neiltu.github.io/linkneil/2023/03/31/025_05.Python%20Defining%20Functions/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Don't believe everything you hear, read, or are told. <strong>Use your own head,</strong> think, and judge. - Shakespeare</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/linkneil/tags/Python/"># Python</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/linkneil/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/linkneil/2023/04/01/026_06.Python%20Data%20Structures/">06.Python Data Structures資料結構</a>
+            
+            
+            <a class="next" rel="next" href="/linkneil/2023/03/30/024_04.Python%20Statements/">04.Python Statements陳述式</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Neil Tu | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

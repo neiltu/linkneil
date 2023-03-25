@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Neil Tu">
+
+
+
+
+
+<title>Certificate Signing Request | Hexo</title>
+
+
+
+    <link rel="icon" href="/linkneil/favicon1.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/linkneil/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/linkneil/js/script.js"></script>
+    
+    <script src="/linkneil/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/linkneil/">Neil&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/linkneil/archives">Posts</a>
+                
+                    <a class="menu-item" href="/linkneil/category">Categories</a>
+                
+                    <a class="menu-item" href="/linkneil/tag">Tags</a>
+                
+                    <a class="menu-item" href="/linkneil/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/linkneil/">Neil&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/linkneil/archives">Posts</a>
+                
+                    <a class="menu-item" href="/linkneil/category">Categories</a>
+                
+                    <a class="menu-item" href="/linkneil/tag">Tags</a>
+                
+                    <a class="menu-item" href="/linkneil/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Certificate Signing Request</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Neil Tu</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 26, 2023&nbsp;&nbsp;18:48:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/linkneil/categories/CSR/">CSR</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="Certificate-Signing-Request-CSR"><a href="#Certificate-Signing-Request-CSR" class="headerlink" title="Certificate Signing Request(CSR)"></a>Certificate Signing Request(CSR)</h2><h3 id="Certificate-Signing-Request-CSR-1"><a href="#Certificate-Signing-Request-CSR-1" class="headerlink" title="Certificate Signing Request(CSR)"></a>Certificate Signing Request(CSR)</h3><p>In terms of certificate usage, the roles played by CSR (Certificate Signing Request) and CER (Certificate) are as follows:</p>
+<ul>
+<li>CSR is a file containing encrypted keys and certificate-related information generated by the applicant, which is used by the applicant to request a certificate from a certificate authority (CA).</li>
+<li>CER is a certificate file signed by a CA that contains the applicant’s public key and other related information, which is used to identify the applicant on the Internet.<br>在憑證使用上，CSR (Certificate Signing Request) 和 CER (Certificate) 扮演的角色如下：</li>
+<li>CSR 是由申請者產生的加密金鑰和證書相關資訊的檔案，申請者使用它來向證書授權機構 (CA) 申請證書。</li>
+<li>CER 是由 CA 簽署的包含申請者公開金鑰和其他相關資訊的證書檔案，它用於在網際網路上識別申請者。</li>
+</ul>
+<h3 id="Certificate-CSR"><a href="#Certificate-CSR" class="headerlink" title="Certificate(CSR)"></a>Certificate(CSR)</h3><p>In short, CSR is the request generated by the user to obtain a certificate, while CER is the certificate itself signed by the CA.<br>Usually, it is said that CER is provided to the other company to achieve transaction purposes. After receiving the CER, the other party needs to do the following:</p>
+<ul>
+<li>Verify the authenticity of the CER: The other party needs to confirm that the CER is signed by a legitimate CA to ensure that the certificate is genuine and trustworthy.</li>
+<li>Install the CER: The other party needs to install the CER on its server to enable secure website communication or other secure communications.</li>
+<li>Update the CER: CERs usually have a certain validity period, and the other party needs to update the CER before it expires to ensure the security and reliability of the website.<br>簡單來說，CSR 是用戶生成證書的請求，而 CER 是由 CA 簽署的證書本身。<br>通常會講 CER 提供給對方公司達成交易目的，對方收到 CER 之後需要做以下幾件事情：</li>
+<li>驗證 CER 的真實性：對方需要確認 CER 是由合法的 CA 簽署的，以確保該證書是真實可信的。</li>
+<li>安裝 CER：對方需要將 CER 安裝在其服務器上，以便進行網站加密通信或進行其他安全通訊。</li>
+<li>更新 CER：CER 通常有一定的有效期限，對方需要在到期之前更新 CER，以確保網站的安全性和可靠性。</li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Neil Tu</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://neiltu.github.io/linkneil/2023/03/26/020_Certificate%20Signing%20Request/">https://neiltu.github.io/linkneil/2023/03/26/020_Certificate%20Signing%20Request/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Don't believe everything you hear, read, or are told. <strong>Use your own head,</strong> think, and judge. - Shakespeare</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/linkneil/tags/CSR/"># CSR</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/linkneil/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/linkneil/2023/03/27/021_01.Python%20introduction/">01.Python introduction介紹</a>
+            
+            
+            <a class="next" rel="next" href="/linkneil/2023/03/25/019_multi-thread%20file%20readwrite/">multi-thread file read/write</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Neil Tu | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
