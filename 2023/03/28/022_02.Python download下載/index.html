@@ -13,7 +13,7 @@
 
 
 
-<title>07.Python Modules模組 | Hexo</title>
+<title>02.Python download | Hexo</title>
 
 
 
@@ -233,7 +233,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">07.Python Modules模組</h1>
+            <h1 class="post-title">02.Python download</h1>
             
                 <div class="post-meta">
                     
@@ -242,7 +242,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">April 2, 2023&nbsp;&nbsp;22:01:00</a>
+                        Date: <a href="#">March 28, 2023&nbsp;&nbsp;22:01:00</a>
                         </span>
                     
                     
@@ -258,11 +258,12 @@
         </header>
 
         <div class="post-content">
-            <h2 id="Python-Modules模組"><a href="#Python-Modules模組" class="headerlink" title="Python Modules模組"></a>Python Modules模組</h2><h3 id="for-Module"><a href="#for-Module" class="headerlink" title="for Module"></a>for Module</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># Fibonacci numbers module</span><br><span class="line"></span><br><span class="line">def fib(n):    # write Fibonacci series up to n</span><br><span class="line">    a, b = 0, 1</span><br><span class="line">    while a &lt; n:</span><br><span class="line">        print(a, end=&#x27; &#x27;)</span><br><span class="line">        a, b = b, a+b</span><br><span class="line">    print()</span><br><span class="line"></span><br><span class="line">def fib2(n):   # return Fibonacci series up to n</span><br><span class="line">    result = []</span><br><span class="line">    a, b = 0, 1</span><br><span class="line">    while a &lt; n:</span><br><span class="line">        result.append(a)</span><br><span class="line">        a, b = b, a+b</span><br><span class="line">    return result</span><br></pre></td></tr></table></figure>
+            <h2 id="Python-download下載"><a href="#Python-download下載" class="headerlink" title="Python download下載"></a>Python download下載</h2><h3 id="下載"><a href="#下載" class="headerlink" title="下載"></a>下載</h3><p><a target="_blank" rel="noopener" href="https://www.python.org/downloads/">https://www.python.org/downloads/</a><br>常見路徑 &#x2F;usr&#x2F;local&#x2F;python<br>壓縮版本 python-3.9.2-embed-amd64.zip 開啟python.exe</p>
+<h3 id="互動模式"><a href="#互動模式" class="headerlink" title="互動模式"></a>互動模式</h3><p>主提示符通（&gt;&gt;&gt;）表示；輸入連續提示符（…）<br>範例:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; the_world_is_flat = True</span><br><span class="line">&gt;&gt;&gt; if the_world_is_flat:</span><br><span class="line">...    print(&quot;Be careful not to fall off!&quot;)</span><br><span class="line">...</span><br><span class="line">Be careful not to fall off!</span><br></pre></td></tr></table></figure>
 
-<h3 id="use"><a href="#use" class="headerlink" title="use"></a>use</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import fibo</span><br><span class="line">from fibo import fib, fib2</span><br><span class="line">from fibo import *</span><br><span class="line">import fibo as fib</span><br><span class="line">from fibo import fib as fibonacci</span><br><span class="line">dir(fibo)</span><br><span class="line">dir()</span><br></pre></td></tr></table></figure>
-
-<p>學習材料: <a target="_blank" rel="noopener" href="https://docs.python.org/zh-tw/3/tutorial/index.html">https://docs.python.org/zh-tw/3/tutorial/index.html</a></p>
+<h3 id="字元編碼-encoding"><a href="#字元編碼-encoding" class="headerlink" title="字元編碼 (encoding)"></a>字元編碼 (encoding)</h3><p>Python 原始碼檔案的字元編碼使用 UTF-8<br>其他編碼 # -<em>- coding: encoding -</em>-<br>Windows-1252 編碼 # -<em>- coding: cp1252 -</em>-<br>UNIX “shebang” line:<br>#!&#x2F;usr&#x2F;bin&#x2F;env python3</p>
+<h1 id="coding-cp1252"><a href="#coding-cp1252" class="headerlink" title="-- coding: cp1252 --"></a>-<em>- coding: cp1252 -</em>-</h1><p>學習材料: <a target="_blank" rel="noopener" href="https://docs.python.org/zh-tw/3/tutorial/index.html">https://docs.python.org/zh-tw/3/tutorial/index.html</a></p>
 
         </div>
 
@@ -277,7 +278,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://neiltu.github.io/linkneil/2023/04/02/027_07.Python%20Modules/">https://neiltu.github.io/linkneil/2023/04/02/027_07.Python%20Modules/</a></span>
+                        <span><a href="https://neiltu.github.io/linkneil/2023/03/28/022_02.Python%20download%E4%B8%8B%E8%BC%89/">https://neiltu.github.io/linkneil/2023/03/28/022_02.Python%20download%E4%B8%8B%E8%BC%89/</a></span>
                     </p>
                 
                 
@@ -314,8 +315,10 @@
         </section>
         <section class="post-nav">
             
+                <a class="prev" rel="prev" href="/linkneil/2023/03/29/023_03.Python%20as%20a%20Calculator%E5%9E%8B%E6%85%8B/">03.Python as a Calculator</a>
             
-            <a class="next" rel="next" href="/linkneil/2023/04/01/026_06.Python%20Data%20Structures/">06.Python Data Structures資料結構</a>
+            
+            <a class="next" rel="next" href="/linkneil/2023/03/27/021_01.Python%20introduction%E4%BB%8B%E7%B4%B9/">01.Python introduction</a>
             
         </section>
 
