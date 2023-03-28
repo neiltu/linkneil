@@ -13,7 +13,7 @@
 
 
 
-<title>07.Python Modules | Hexo</title>
+<title>Docker introduction | Hexo</title>
 
 
 
@@ -233,7 +233,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">07.Python Modules</h1>
+            <h1 class="post-title">Docker introduction</h1>
             
                 <div class="post-meta">
                     
@@ -242,14 +242,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">April 2, 2023&nbsp;&nbsp;22:01:00</a>
+                        Date: <a href="#">April 3, 2023&nbsp;&nbsp;20:38:00</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/linkneil/categories/Python-notes/">Python notes</a>
+                                <a href="/linkneil/categories/Docker-notes/">Docker notes</a>
                             
                         </span>
                     
@@ -258,11 +258,21 @@
         </header>
 
         <div class="post-content">
-            <h2 id="Python-Modules模組"><a href="#Python-Modules模組" class="headerlink" title="Python Modules模組"></a>Python Modules模組</h2><h3 id="for-Module"><a href="#for-Module" class="headerlink" title="for Module"></a>for Module</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># Fibonacci numbers module</span><br><span class="line"></span><br><span class="line">def fib(n):    # write Fibonacci series up to n</span><br><span class="line">    a, b = 0, 1</span><br><span class="line">    while a &lt; n:</span><br><span class="line">        print(a, end=&#x27; &#x27;)</span><br><span class="line">        a, b = b, a+b</span><br><span class="line">    print()</span><br><span class="line"></span><br><span class="line">def fib2(n):   # return Fibonacci series up to n</span><br><span class="line">    result = []</span><br><span class="line">    a, b = 0, 1</span><br><span class="line">    while a &lt; n:</span><br><span class="line">        result.append(a)</span><br><span class="line">        a, b = b, a+b</span><br><span class="line">    return result</span><br></pre></td></tr></table></figure>
-
-<h3 id="use"><a href="#use" class="headerlink" title="use"></a>use</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import fibo</span><br><span class="line">from fibo import fib, fib2</span><br><span class="line">from fibo import *</span><br><span class="line">import fibo as fib</span><br><span class="line">from fibo import fib as fibonacci</span><br><span class="line">dir(fibo)</span><br><span class="line">dir()</span><br></pre></td></tr></table></figure>
-
-<p>學習材料: <a target="_blank" rel="noopener" href="https://docs.python.org/zh-tw/3/tutorial/index.html">https://docs.python.org/zh-tw/3/tutorial/index.html</a></p>
+            <h2 id="Docker-introduction介紹"><a href="#Docker-introduction介紹" class="headerlink" title="Docker introduction介紹"></a>Docker introduction介紹</h2><h3 id="簡述"><a href="#簡述" class="headerlink" title="簡述"></a>簡述</h3><p>Docker創辦人暨技術長Solomon Hykes在2014年6月首屆Dockercon技術大會，引述物件導向語言之父Alan Kay對網際網路的期待，Solomon Hykes發願要用Docker平臺實現這個藍圖<br>Container應用程式所需的相關程式碼、函式庫、環境配置檔都打包起來，建立資源控管機制來分配Host OS上的系統資源。<br>2013年dotCloud這家PaaS服務公司開源釋Container標準化的平臺Docker，後dotCloud決定以Docker為名成立新公司</p>
+<h3 id="Container技術和伺服器虛擬化差異"><a href="#Container技術和伺服器虛擬化差異" class="headerlink" title="Container技術和伺服器虛擬化差異?"></a>Container技術和伺服器虛擬化差異?</h3><p>vSphere或Hyper-V是以作業系統為中心、Container應用程式為中心</p>
+<h3 id="常見差異"><a href="#常見差異" class="headerlink" title="常見差異?"></a>常見差異?</h3><p>虛擬機器需要安裝作業系統、Container技術在OS內的核心系統層來打造虛擬執行環境，共用Host OS(OS層的虛擬化技術)</p>
+<h3 id="Container是輕量級"><a href="#Container是輕量級" class="headerlink" title="Container是輕量級?"></a>Container是輕量級?</h3><p>Container不需要等待作業系統開機，遠比十分鐘才能開啟的傳統虛擬機器來快。</p>
+<h3 id="Docker實現Container標準化"><a href="#Docker實現Container標準化" class="headerlink" title="Docker實現Container標準化?"></a>Docker實現Container標準化?</h3><p>Docker採用了aufs檔案系統來設計，層層堆疊的Container映象檔，Dockerfile設定檔來記錄建立Container過程，Container相關指令運用標準化</p>
+<h3 id="Container映象檔內安裝多少應用程式？"><a href="#Container映象檔內安裝多少應用程式？" class="headerlink" title="Container映象檔內安裝多少應用程式？"></a>Container映象檔內安裝多少應用程式？</h3><p>可以同時安裝Ubuntu、Apache、MySQL、Node.js、Ruby，Docker官方建議，一隻程式安裝一個Container，將這些Container疊起來提供一個完整的服務<br>Docker稱Microservices（微服務）的新軟體架構，組成每個應用系統的Stack，拆解成許多小型服務，如Apache服務、MySQL服務、Node.js服務、Ruby服務，每個服務都是包在Container裡的一隻程式。好處:鬆散耦合的彈性應用程式架構，可輕易抽換其中一個Container。</p>
+<h3 id="In-summary"><a href="#In-summary" class="headerlink" title="In summary"></a>In summary</h3><p>1.Docker是一個Client-Server架構的應用程式，其中包括Docker用戶端程式、和在背景執行的Docker伺服器，以及將Container封裝後的Docker映象檔，用來儲存映象檔的Registry服務。<br>2.Docker映象檔是一種分層堆疊的運作方式，採用了aufs的檔案架構，要建立一個可提供應用程式完整執行環境的Container映象檔，要先從一個基礎映象檔開始疊起，一層層將不同Stack的Docker映象檔疊加上去，最後組合成一個應用程式所需Container執行環境的映象檔。<br>3.創建映射檔的過程中，可以使用Docker run指令來執行基礎映象檔並安裝所需的軟體，再使用Docker commit指令將Container匯出成一個新的映射檔。每個Stack也都是可以匯出成一個映射檔，而建立好的映射檔可以用來建立一個新的Container。</p>
+<h3 id="補充-AUFS（Advanced-Multi-Layered-Unification-Filesystem）"><a href="#補充-AUFS（Advanced-Multi-Layered-Unification-Filesystem）" class="headerlink" title="補充:AUFS（Advanced Multi-Layered Unification Filesystem）"></a>補充:AUFS（Advanced Multi-Layered Unification Filesystem）</h3><p>1.AUFS（Advanced Multi-Layered Unification Filesystem）是一種用於 Linux 作業系統的聯合檔案系統，用於在多個檔案系統之間創建聯合掛載點。AUFS 可以將多個目錄組合在一起，使它們看起來像一個單一的檔案系統。<br>2.AUFS 最常用於 Docker 容器技術中，因為 Docker 利用 AUFS 實現了容器的羽量級隔離和高效的鏡像管理。Docker 使用 AUFS 實現了一種鏡像分層的機制，每個 Docker 鏡像都是由多個唯讀層組成，這些層可以被疊加在一起，形成一個可寫的容器。這種分層機制可以讓 Docker 鏡像之間共用相同的檔和目錄，從而節省磁碟空間並提高容器的啟動速度。<br>3.AUFS 支援多個分支，可以讓使用者將不同的檔案系統層級組合在一起。在 Docker 中，每個鏡像層級都被認為是一個 AUFS 分支，Docker 利用 AUFS 實現了鏡像的複用和共用。例如，多個 Docker 容器可以共用同一個唯讀鏡像分支，而每個容器都有自己的可寫分支，從而實現容器之間的隔離。</p>
+<h3 id="補充-Docker-Hub"><a href="#補充-Docker-Hub" class="headerlink" title="補充:Docker Hub"></a>補充:Docker Hub</h3><ol>
+<li>   鏡像註冊表：用戶可以在 Docker Hub 上註冊並上傳自己的 Docker 鏡像，或者下載和使用其他用戶上傳的 Docker 鏡像。</li>
+<li>   構建自動化：Docker Hub 可以自動化構建 Docker 鏡像，例如從 GitHub 上的代碼構建 Docker 鏡像。</li>
+<li>   組織管理：使用者可以創建和管理組織，以便團隊成員可以一起共用 Docker 鏡像。</li>
+<li>   安全掃描：Docker Hub 可以掃描上傳的 Docker 鏡像以檢查其中是否包含安全性漏洞。</li>
+<li>   Webhooks：使用者可以配置 Webhooks 以便在 Docker 鏡像被更新時自動觸發構建、測試或部署流程。</li>
+</ol>
 
         </div>
 
@@ -277,7 +287,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://neiltu.github.io/linkneil/2023/04/02/027_07.Python%20Modules%E6%A8%A1%E7%B5%84/">https://neiltu.github.io/linkneil/2023/04/02/027_07.Python%20Modules%E6%A8%A1%E7%B5%84/</a></span>
+                        <span><a href="https://neiltu.github.io/linkneil/2023/04/03/028_Docker%20introduction/">https://neiltu.github.io/linkneil/2023/04/03/028_Docker%20introduction/</a></span>
                     </p>
                 
                 
@@ -301,7 +311,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/linkneil/tags/Python/"># Python</a>
+                        <a href="/linkneil/tags/Docker/"># Docker</a>
                     
                         
                 </span>
@@ -314,10 +324,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/linkneil/2023/04/03/028_Docker%20introduction/">Docker introduction</a>
+                <a class="prev" rel="prev" href="/linkneil/2023/04/04/029_Kubernetes%20notes/">Kubernetes notes</a>
             
             
-            <a class="next" rel="next" href="/linkneil/2023/04/01/026_06.Python%20Data%20Structures%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B/">06.Python Data Structures</a>
+            <a class="next" rel="next" href="/linkneil/2023/04/02/027_07.Python%20Modules%E6%A8%A1%E7%B5%84/">07.Python Modules</a>
             
         </section>
 

@@ -13,7 +13,7 @@
 
 
 
-<title>07.Python Modules | Hexo</title>
+<title>Kubernetes notes | Hexo</title>
 
 
 
@@ -233,7 +233,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">07.Python Modules</h1>
+            <h1 class="post-title">Kubernetes notes</h1>
             
                 <div class="post-meta">
                     
@@ -242,14 +242,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">April 2, 2023&nbsp;&nbsp;22:01:00</a>
+                        Date: <a href="#">April 4, 2023&nbsp;&nbsp;20:38:00</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/linkneil/categories/Python-notes/">Python notes</a>
+                                <a href="/linkneil/categories/Kubernetes-notes/">Kubernetes notes</a>
                             
                         </span>
                     
@@ -258,11 +258,15 @@
         </header>
 
         <div class="post-content">
-            <h2 id="Python-Modules模組"><a href="#Python-Modules模組" class="headerlink" title="Python Modules模組"></a>Python Modules模組</h2><h3 id="for-Module"><a href="#for-Module" class="headerlink" title="for Module"></a>for Module</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># Fibonacci numbers module</span><br><span class="line"></span><br><span class="line">def fib(n):    # write Fibonacci series up to n</span><br><span class="line">    a, b = 0, 1</span><br><span class="line">    while a &lt; n:</span><br><span class="line">        print(a, end=&#x27; &#x27;)</span><br><span class="line">        a, b = b, a+b</span><br><span class="line">    print()</span><br><span class="line"></span><br><span class="line">def fib2(n):   # return Fibonacci series up to n</span><br><span class="line">    result = []</span><br><span class="line">    a, b = 0, 1</span><br><span class="line">    while a &lt; n:</span><br><span class="line">        result.append(a)</span><br><span class="line">        a, b = b, a+b</span><br><span class="line">    return result</span><br></pre></td></tr></table></figure>
-
-<h3 id="use"><a href="#use" class="headerlink" title="use"></a>use</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import fibo</span><br><span class="line">from fibo import fib, fib2</span><br><span class="line">from fibo import *</span><br><span class="line">import fibo as fib</span><br><span class="line">from fibo import fib as fibonacci</span><br><span class="line">dir(fibo)</span><br><span class="line">dir()</span><br></pre></td></tr></table></figure>
-
-<p>學習材料: <a target="_blank" rel="noopener" href="https://docs.python.org/zh-tw/3/tutorial/index.html">https://docs.python.org/zh-tw/3/tutorial/index.html</a></p>
+            <h2 id="Minikube-install安裝"><a href="#Minikube-install安裝" class="headerlink" title="Minikube install安裝"></a>Minikube install安裝</h2><h3 id="Minikube"><a href="#Minikube" class="headerlink" title="Minikube"></a>Minikube</h3><p>Google 發布的一個輕量級工具，本機架設一個 Kubernetes Cluster，熟悉 Kubernetes 的指令與環境。run in virtual machine.<br>1.VirtualBox install<br>2.kubectl 套件(Kubernetes Controller) <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/tasks/tools/">https://kubernetes.io/docs/tasks/tools/</a><br>3.Docker install</p>
+<h3 id="Docker-Registry"><a href="#Docker-Registry" class="headerlink" title="Docker Registry"></a>Docker Registry</h3><p>倉庫裡面存放著各式各樣的 Docker Image，官方:Docker Hub Registry<br>1.註冊 <a target="_blank" rel="noopener" href="https://hub.docker.com/">https://hub.docker.com/</a><br>Docker Repository&gt; Create&gt; Create Repository</p>
+<h3 id="Pod"><a href="#Pod" class="headerlink" title="Pod"></a>Pod</h3><p>Pod Kubernetes相當於一個application<br>yaml檔<br>1-n Docker Container (port溝通)</p>
+<h3 id="Nodes"><a href="#Nodes" class="headerlink" title="Nodes"></a>Nodes</h3><p><a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/architecture/nodes/">https://kubernetes.io/docs/concepts/architecture/nodes/</a><br>Kubernetes 運行你的工作量通過將容器放入Pod中以在節點上運行。 節點可以是虛擬機或物理機，具體取決於群集。每個節點 由控制平面並包含運行所需的服務豆莢.<br>iptables 是 Linux 上的防火牆(firewall)<br>Nodes其物件有Kubelet &amp; kube-proxy</p>
+<p>kubelet管理該 Node 上的所有 pods，與master node溝通<br>kube-proxy所有 Pods 的資訊傳給 iptables<br>Load balancing決定要將 request 給哪個 Node</p>
+<h3 id="創建新Pod"><a href="#創建新Pod" class="headerlink" title="創建新Pod"></a>創建新Pod</h3><p>kubelet 收到 master node 指令，創建一個 Pod<br>kube-proxy 告知 iptables，目前該 Pod 可用。<br>user 發送 requests，requests to Load Balancer，由 Load Balancer 決定request交給哪個Node，此時收到 requests的 Node 經由 iptables 決定送給哪個 Pod 。<br>internet&gt; Load Balancing&gt; iptables&gt; pod</p>
+<h3 id="Replication-Controller"><a href="#Replication-Controller" class="headerlink" title="Replication Controller"></a>Replication Controller</h3><p>Kubernetes上用來管理Pod的數量以及狀態的controller</p>
+<h3 id="Replica-Set"><a href="#Replica-Set" class="headerlink" title="Replica Set"></a>Replica Set</h3><p>Replica Set優於Replication Controller，富彈性selector</p>
+<h3 id="Deployment"><a href="#Deployment" class="headerlink" title="Deployment"></a>Deployment</h3><p>部署application<br>application升級<br>升級過程無停機<br>Rollback version</p>
 
         </div>
 
@@ -277,7 +281,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://neiltu.github.io/linkneil/2023/04/02/027_07.Python%20Modules%E6%A8%A1%E7%B5%84/">https://neiltu.github.io/linkneil/2023/04/02/027_07.Python%20Modules%E6%A8%A1%E7%B5%84/</a></span>
+                        <span><a href="https://neiltu.github.io/linkneil/2023/04/04/029_Kubernetes%20notes/">https://neiltu.github.io/linkneil/2023/04/04/029_Kubernetes%20notes/</a></span>
                     </p>
                 
                 
@@ -301,7 +305,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/linkneil/tags/Python/"># Python</a>
+                        <a href="/linkneil/tags/Kubernetes/"># Kubernetes</a>
                     
                         
                 </span>
@@ -314,10 +318,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/linkneil/2023/04/03/028_Docker%20introduction/">Docker introduction</a>
             
-            
-            <a class="next" rel="next" href="/linkneil/2023/04/01/026_06.Python%20Data%20Structures%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B/">06.Python Data Structures</a>
+            <a class="next" rel="next" href="/linkneil/2023/04/03/028_Docker%20introduction/">Docker introduction</a>
             
         </section>
 
