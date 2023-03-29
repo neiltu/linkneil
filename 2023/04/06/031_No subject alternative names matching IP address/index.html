@@ -13,7 +13,7 @@
 
 
 
-<title>Kubernetes notes | Hexo</title>
+<title>No subject alternative names matching IP address | Hexo</title>
 
 
 
@@ -233,7 +233,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">Kubernetes notes</h1>
+            <h1 class="post-title">No subject alternative names matching IP address</h1>
             
                 <div class="post-meta">
                     
@@ -242,14 +242,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">April 4, 2023&nbsp;&nbsp;20:38:00</a>
+                        Date: <a href="#">April 6, 2023&nbsp;&nbsp;21:26:00</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/linkneil/categories/Kubernetes-notes/">Kubernetes notes</a>
+                                <a href="/linkneil/categories/sof/">sof</a>
                             
                         </span>
                     
@@ -258,15 +258,14 @@
         </header>
 
         <div class="post-content">
-            <h2 id="Minikube-install安裝"><a href="#Minikube-install安裝" class="headerlink" title="Minikube install安裝"></a>Minikube install安裝</h2><h3 id="Minikube"><a href="#Minikube" class="headerlink" title="Minikube"></a>Minikube</h3><p>Google 發布的一個輕量級工具，本機架設一個 Kubernetes Cluster，熟悉 Kubernetes 的指令與環境。run in virtual machine.<br>1.VirtualBox install<br>2.kubectl 套件(Kubernetes Controller) <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/tasks/tools/">https://kubernetes.io/docs/tasks/tools/</a><br>3.Docker install</p>
-<h3 id="Docker-Registry"><a href="#Docker-Registry" class="headerlink" title="Docker Registry"></a>Docker Registry</h3><p>倉庫裡面存放著各式各樣的 Docker Image，官方:Docker Hub Registry<br>1.註冊 <a target="_blank" rel="noopener" href="https://hub.docker.com/">https://hub.docker.com/</a><br>Docker Repository&gt; Create&gt; Create Repository</p>
-<h3 id="Pod"><a href="#Pod" class="headerlink" title="Pod"></a>Pod</h3><p>Pod Kubernetes相當於一個application<br>yaml檔<br>1-n Docker Container (port溝通)</p>
-<h3 id="Nodes"><a href="#Nodes" class="headerlink" title="Nodes"></a>Nodes</h3><p><a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/architecture/nodes/">https://kubernetes.io/docs/concepts/architecture/nodes/</a><br>Kubernetes 運行你的工作量通過將容器放入Pod中以在節點上運行。 節點可以是虛擬機或物理機，具體取決於群集。每個節點 由控制平面並包含運行所需的服務豆莢.<br>iptables 是 Linux 上的防火牆(firewall)<br>Nodes其物件有Kubelet &amp; kube-proxy</p>
-<p>kubelet管理該 Node 上的所有 pods，與master node溝通<br>kube-proxy所有 Pods 的資訊傳給 iptables<br>Load balancing決定要將 request 給哪個 Node</p>
-<h3 id="創建新Pod"><a href="#創建新Pod" class="headerlink" title="創建新Pod"></a>創建新Pod</h3><p>kubelet 收到 master node 指令，創建一個 Pod<br>kube-proxy 告知 iptables，目前該 Pod 可用。<br>user 發送 requests，requests to Load Balancer，由 Load Balancer 決定request交給哪個Node，此時收到 requests的 Node 經由 iptables 決定送給哪個 Pod 。<br>internet&gt; Load Balancing&gt; iptables&gt; pod</p>
-<h3 id="Replication-Controller"><a href="#Replication-Controller" class="headerlink" title="Replication Controller"></a>Replication Controller</h3><p>Kubernetes上用來管理Pod的數量以及狀態的controller</p>
-<h3 id="Replica-Set"><a href="#Replica-Set" class="headerlink" title="Replica Set"></a>Replica Set</h3><p>Replica Set優於Replication Controller，富彈性selector</p>
-<h3 id="Deployment"><a href="#Deployment" class="headerlink" title="Deployment"></a>Deployment</h3><p>部署application<br>application升級<br>升級過程無停機<br>Rollback version</p>
+            <h2 id=""><a href="#" class="headerlink" title=""></a></h2><p>tomcat做向外導向發生問題，發現實際https憑證更換為domain name，故做法直接更新前端urlPath(或是更新憑證為IP，又是另外設定)<br><a target="_blank" rel="noopener" href="https://20..xx.xx.xx/go-%3Ehttps://test.com.tw/go">https://20..xx.xx.xx/go-&gt;https://test.com.tw/go</a></p>
+<h3 id="tomcat9-stderr-2023-03-29"><a href="#tomcat9-stderr-2023-03-29" class="headerlink" title="tomcat9-stderr.2023-03-29"></a>tomcat9-stderr.2023-03-29</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">javax.net.ssl|ERROR|10|http-nio-80-exec-1|2023-03-29 15:12:42.594 CST|TransportContext.java:341|Fatal (CERTIFICATE_UNKNOWN): No subject alternative names matching IP address 20.xx.xx.xx found (</span><br><span class="line">&quot;throwable&quot; : &#123;</span><br><span class="line">  java.security.cert.CertificateException: No subject alternative names matching IP address 20.xx.xx.xx found</span><br><span class="line">  	at java.base/sun.security.util.HostnameChecker.matchIP(HostnameChecker.java:165)</span><br><span class="line">  	at java.base/sun.security.util.HostnameChecker.match(HostnameChecker.java:101)</span><br><span class="line">  	at java.base/sun.security.ssl.X509TrustManagerImpl.checkIdentity(X509TrustManagerImpl.java:455)</span><br><span class="line">  	at java.base/sun.security.ssl.X509TrustManagerImpl.checkIdentity(X509TrustManagerImpl.java:429)</span><br><span class="line">  	at java.base/sun.security.ssl.X509TrustManagerImpl.checkTrusted(X509TrustManagerImpl.java:229)</span><br><span class="line">  	at java.base/sun.security.ssl.X509TrustManagerImpl.checkServerTrusted(X509TrustManagerImpl.java:129)</span><br><span class="line">  	at java.base/sun.security.ssl.CertificateMessage$T12CertificateConsumer.checkServerCerts(CertificateMessage.java:638)</span><br><span class="line">  	at java.base/sun.security.ssl.CertificateMessage$T12CertificateConsumer.onCertificate(CertificateMessage.java:473)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="檢查憑證"><a href="#檢查憑證" class="headerlink" title="檢查憑證"></a>檢查憑證</h3><p>1.D:\Zulu\zulu11\lib\security\xxx.cer<br>2.<a target="_blank" rel="noopener" href="https://test.com/">https://test.com</a> -&gt;瀏覽器旁邊鎖頭&gt; 檢視憑證，確認是否相同</p>
+<h3 id="hosts可評估是否修正"><a href="#hosts可評估是否修正" class="headerlink" title="hosts可評估是否修正"></a>hosts可評估是否修正</h3><p>C:\Windows\System32\drivers\etc\hos</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">20.xx.xx.xx test.com.tw</span><br></pre></td></tr></table></figure>
+
+<h3 id="前端path"><a href="#前端path" class="headerlink" title="前端path"></a>前端path</h3><p>urlPath:test.com.tw&#x2F;go</p>
 
         </div>
 
@@ -281,7 +280,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://neiltu.github.io/linkneil/2023/04/04/029_Kubernetes%20notes/">https://neiltu.github.io/linkneil/2023/04/04/029_Kubernetes%20notes/</a></span>
+                        <span><a href="https://neiltu.github.io/linkneil/2023/04/06/031_No%20subject%20alternative%20names%20matching%20IP%20address/">https://neiltu.github.io/linkneil/2023/04/06/031_No%20subject%20alternative%20names%20matching%20IP%20address/</a></span>
                     </p>
                 
                 
@@ -305,7 +304,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/linkneil/tags/Kubernetes/"># Kubernetes</a>
+                        <a href="/linkneil/tags/Tomcat/"># Tomcat</a>
                     
                         
                 </span>
@@ -318,10 +317,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/linkneil/2023/04/05/030_Curl%20Command/">Curl Command</a>
             
-            
-            <a class="next" rel="next" href="/linkneil/2023/04/03/028_Docker%20introduction/">Docker introduction</a>
+            <a class="next" rel="next" href="/linkneil/2023/04/05/030_Curl%20Command/">Curl Command</a>
             
         </section>
 
