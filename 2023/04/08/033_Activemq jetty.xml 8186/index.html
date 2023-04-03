@@ -13,7 +13,7 @@
 
 
 
-<title>No subject alternative names matching IP address | Hexo</title>
+<title>activemq jetty.xml 安全設置, 8161關閉外部訪問 | Hexo</title>
 
 
 
@@ -164,76 +164,11 @@
                 <div class="container">
     
     
-        <div class="post-toc">
-    <div class="tocbot-list">
-    </div>
-    <div class="tocbot-list-menu">
-        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
-        <a onclick="go_top()">Back to top</a>
-        <a onclick="go_bottom()">Go to bottom</a>
-    </div>
-</div>
-
-<script>
-    var tocbot_timer;
-    var DEPTH_MAX = 6; // 为 6 时展开所有
-    var tocbot_default_config = {
-        tocSelector: '.tocbot-list',
-        contentSelector: '.post-content',
-        headingSelector: 'h1, h2, h3, h4, h5',
-        orderedList: false,
-        scrollSmooth: true,
-        onClick: extend_click,
-    };
-
-    function extend_click() {
-        clearTimeout(tocbot_timer);
-        tocbot_timer = setTimeout(function() {
-            tocbot.refresh(obj_merge(tocbot_default_config, {
-                hasInnerContainers: true
-            }));
-        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
-    }
-
-    document.ready(function() {
-        tocbot.init(obj_merge(tocbot_default_config, {
-            collapseDepth: 1
-        }));
-    });
-
-    function expand_toc() {
-        var b = document.querySelector('.tocbot-toc-expand');
-        var expanded = b.getAttribute('data-expanded');
-        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
-        tocbot.refresh(obj_merge(tocbot_default_config, {
-            collapseDepth: expanded ? 1 : DEPTH_MAX
-        }));
-        b.innerText = expanded ? 'Expand all' : 'Collapse all';
-    }
-
-    function go_top() {
-        window.scrollTo(0, 0);
-    }
-
-    function go_bottom() {
-        window.scrollTo(0, document.body.scrollHeight);
-    }
-
-    function obj_merge(target, source) {
-        for (var item in source) {
-            if (source.hasOwnProperty(item)) {
-                target[item] = source[item];
-            }
-        }
-        return target;
-    }
-</script>
-    
 
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">No subject alternative names matching IP address</h1>
+            <h1 class="post-title">activemq jetty.xml 安全設置, 8161關閉外部訪問</h1>
             
                 <div class="post-meta">
                     
@@ -242,14 +177,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">April 6, 2023&nbsp;&nbsp;21:26:00</a>
+                        Date: <a href="#">April 8, 2023&nbsp;&nbsp;21:26:00</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/linkneil/categories/sof/">sof</a>
+                                <a href="/linkneil/categories/Python-notes/">Python notes</a>
                             
                         </span>
                     
@@ -258,15 +193,49 @@
         </header>
 
         <div class="post-content">
-            <h2 id=""><a href="#" class="headerlink" title=""></a></h2><p>tomcat做向外導向發生問題，發現實際https憑證更換為domain name，故做法直接更新前端urlPath(或是更新憑證為IP，又是另外設定)<br><a target="_blank" rel="noopener" href="https://20..xx.xx.xx/go-%3Ehttps://test.com.tw/go">https://20..xx.xx.xx/go-&gt;https://test.com.tw/go</a></p>
-<h3 id="tomcat9-stderr-2023-03-29"><a href="#tomcat9-stderr-2023-03-29" class="headerlink" title="tomcat9-stderr.2023-03-29"></a>tomcat9-stderr.2023-03-29</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">javax.net.ssl|ERROR|10|http-nio-80-exec-1|2023-03-29 15:12:42.594 CST|TransportContext.java:341|Fatal (CERTIFICATE_UNKNOWN): No subject alternative names matching IP address 20.xx.xx.xx found (</span><br><span class="line">&quot;throwable&quot; : &#123;</span><br><span class="line">  java.security.cert.CertificateException: No subject alternative names matching IP address 20.xx.xx.xx found</span><br><span class="line">  	at java.base/sun.security.util.HostnameChecker.matchIP(HostnameChecker.java:165)</span><br><span class="line">  	at java.base/sun.security.util.HostnameChecker.match(HostnameChecker.java:101)</span><br><span class="line">  	at java.base/sun.security.ssl.X509TrustManagerImpl.checkIdentity(X509TrustManagerImpl.java:455)</span><br><span class="line">  	at java.base/sun.security.ssl.X509TrustManagerImpl.checkIdentity(X509TrustManagerImpl.java:429)</span><br><span class="line">  	at java.base/sun.security.ssl.X509TrustManagerImpl.checkTrusted(X509TrustManagerImpl.java:229)</span><br><span class="line">  	at java.base/sun.security.ssl.X509TrustManagerImpl.checkServerTrusted(X509TrustManagerImpl.java:129)</span><br><span class="line">  	at java.base/sun.security.ssl.CertificateMessage$T12CertificateConsumer.checkServerCerts(CertificateMessage.java:638)</span><br><span class="line">  	at java.base/sun.security.ssl.CertificateMessage$T12CertificateConsumer.onCertificate(CertificateMessage.java:473)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="檢查憑證"><a href="#檢查憑證" class="headerlink" title="檢查憑證"></a>檢查憑證</h3><p>1.D:\Zulu\zulu11\lib\security\xxx.cer<br>2.<a target="_blank" rel="noopener" href="https://test.com/">https://test.com</a> -&gt;瀏覽器旁邊鎖頭&gt; 檢視憑證，確認是否相同</p>
-<h3 id="hosts可評估是否修正"><a href="#hosts可評估是否修正" class="headerlink" title="hosts可評估是否修正"></a>hosts可評估是否修正</h3><p>C:\Windows\System32\drivers\etc\hos</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">20.xx.xx.xx test.com.tw</span><br></pre></td></tr></table></figure>
-
-<h3 id="前端path"><a href="#前端path" class="headerlink" title="前端path"></a>前端path</h3><p>urlPath:test.com.tw&#x2F;go</p>
-
+            <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">## jetty.xml、8161 host</span><br><span class="line"></span><br><span class="line">### host關閉外部訪問</span><br><span class="line">../conf/jetty.xml</span><br><span class="line">name=&quot;host&quot; value的值0.0.0.0 修改成 127.0.0.1 restart.</span><br></pre></td></tr></table></figure>
+  <bean id="jettyPort" class="org.apache.activemq.web.WebConsolePort" init-method="start">
+             <!-- the default port number for the web console -->
+        <property name="host" value="0.0.0.0"/>
+        <property name="port" value="8161"/>
+  </bean>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### activemq安全設置帳密</span><br><span class="line">../conf/jetty.xml</span><br><span class="line">authenticate value=&quot;true&quot;-&gt;&quot;false&quot;</span><br></pre></td></tr></table></figure>
+<bean id="adminSecurityConstraint"class="org.eclipse.jetty.util.security.Constraint">
+    <property name="name" value="BASIC"/>
+    <property name="roles" value="admin"/>
+    <!-- authenticate=false disable login -->
+    <property name="authenticate" value="true"/>
+</bean>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### activemq install</span><br></pre></td></tr></table></figure>
+建資料夾 mkdir /server 
+權限 chmod 777 /server
+解壓縮 tar -xzvf /server/apache-activemq-5.15.9-bin.tar.gz
+cd /server/apache-activemq-5.6.2/bin 
+權限 chmod 755 activemq 
+執行 ./activemq start >/tmp/smlog
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### check service</span><br></pre></td></tr></table></figure>
+1. ps -ef | grep activemq：此指令將會列出所有正在執行的程序（包括透過 background 方式執行的程序）
+2. nc -lp 61616 &：此指令將會開啟一個 TCP 監聽端口，監聽 61616 port
+3. netstat -anp：此指令將會顯示所有正在使用中的連線、開啟的 port 號以及相關程序的資訊，其中 netstat 是一個用於查詢系統 TCP/IP 網路狀態和統計資料的指令
+4. netstat -an | grep 61616：此指令將會列出所有與 61616 port 相關的連線和程序資訊
+5. netstat -nln | grep 61616：此指令將會列出所有正在監聽 61616 port 的程序資訊
+6. web console管理介面: http://localhost:8161/admin/
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 補充說明</span><br></pre></td></tr></table></figure>
+1. -a / --all：顯示所有資料，不管是否隱藏或是系統的資料
+2. -n / --numeric：顯示 IP 地址和 port 號，不轉換成主機名稱或服務名稱
+3. -l / --listening：只顯示正在監聽的連線
+4. -p / --processes：顯示每個連線對應的程序名稱
+5. -e / --extended：顯示詳細資訊，如 UID 和 GID
+6. -f / --full：顯示完整的資訊，包括各種狀態和檔案系統資訊
+7. -r / --reverse：反向查找，顯示目標的連線或程序
+8. -s / --stats：顯示 TCP/IP 網路統計資訊
+9. -t / --tcp：只顯示 TCP 連線
+10. -u / --udp：只顯示 UDP 連線
+11. -w / --raw：只顯示原始連線，不經過協定解析
+12. -x / --unix：只顯示 UNIX 套接字連線
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### activemq 消息排隊位置</span><br></pre></td></tr></table></figure>
+apache-activemq-5.5.0/data/kahadb/
+```
         </div>
 
         
@@ -280,7 +249,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://neiltu.github.io/linkneil/2023/04/06/031_No%20subject%20alternative%20names%20matching%20IP%20address/">https://neiltu.github.io/linkneil/2023/04/06/031_No%20subject%20alternative%20names%20matching%20IP%20address/</a></span>
+                        <span><a href="https://neiltu.github.io/linkneil/2023/04/08/033_Activemq%20jetty.xml%208186/">https://neiltu.github.io/linkneil/2023/04/08/033_Activemq%20jetty.xml%208186/</a></span>
                     </p>
                 
                 
@@ -304,7 +273,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/linkneil/tags/Tomcat/"># Tomcat</a>
+                        <a href="/linkneil/tags/Python/"># Python</a>
                     
                         
                 </span>
@@ -317,10 +286,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/linkneil/2023/04/07/032_Kubernetes%20notes/">Kubernetes notes</a>
+                <a class="prev" rel="prev" href="/linkneil/2023/04/09/034_Midjourney/">Midjourney v5</a>
             
             
-            <a class="next" rel="next" href="/linkneil/2023/04/05/030_Curl%20Command/">Curl Command</a>
+            <a class="next" rel="next" href="/linkneil/2023/04/07/032_Kubernetes%20notes/">Kubernetes notes</a>
             
         </section>
 
