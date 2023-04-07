@@ -13,7 +13,7 @@
 
 
 
-<title>activemq jetty.xml 安全設置, 8161關閉外部訪問 | Hexo</title>
+<title>activemq jetty.xml 8161 close | Hexo</title>
 
 
 
@@ -168,7 +168,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">activemq jetty.xml 安全設置, 8161關閉外部訪問</h1>
+            <h1 class="post-title">activemq jetty.xml 8161 close</h1>
             
                 <div class="post-meta">
                     
@@ -184,7 +184,7 @@
                         <span class="post-category">
                     Category:
                             
-                                <a href="/linkneil/categories/Python-notes/">Python notes</a>
+                                <a href="/linkneil/categories/activemq/">activemq</a>
                             
                         </span>
                     
@@ -193,7 +193,7 @@
         </header>
 
         <div class="post-content">
-            <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">## jetty.xml、8161 host</span><br><span class="line"></span><br><span class="line">### host關閉外部訪問</span><br><span class="line">../conf/jetty.xml</span><br><span class="line">name=&quot;host&quot; value的值0.0.0.0 修改成 127.0.0.1 restart.</span><br></pre></td></tr></table></figure>
+            <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">## jetty.xml、8161 host 安全設置, 8161關閉外部訪問</span><br><span class="line"></span><br><span class="line">### host關閉外部訪問</span><br><span class="line">../conf/jetty.xml</span><br><span class="line">name=&quot;host&quot; value的值0.0.0.0 修改成 127.0.0.1 restart.</span><br></pre></td></tr></table></figure>
   <bean id="jettyPort" class="org.apache.activemq.web.WebConsolePort" init-method="start">
              <!-- the default port number for the web console -->
         <property name="host" value="0.0.0.0"/>
@@ -273,7 +273,7 @@ apache-activemq-5.5.0/data/kahadb/
                 <span class="tag">
                     
                     
-                        <a href="/linkneil/tags/Python/"># Python</a>
+                        <a href="/linkneil/tags/activemq/"># activemq</a>
                     
                         
                 </span>
