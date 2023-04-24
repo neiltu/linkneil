@@ -13,7 +13,7 @@
 
 
 
-<title>No subject alternative names matching IP address | Hexo</title>
+<title>Linux wc -l | Hexo</title>
 
 
 
@@ -233,7 +233,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">No subject alternative names matching IP address</h1>
+            <h1 class="post-title">Linux wc -l</h1>
             
                 <div class="post-meta">
                     
@@ -242,14 +242,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">April 6, 2023&nbsp;&nbsp;21:26:00</a>
+                        Date: <a href="#">April 16, 2023&nbsp;&nbsp;22:19:00</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/linkneil/categories/sof/">sof</a>
+                                <a href="/linkneil/categories/Linux/">Linux</a>
                             
                         </span>
                     
@@ -258,15 +258,7 @@
         </header>
 
         <div class="post-content">
-            <h2 id=""><a href="#" class="headerlink" title=""></a></h2><p>tomcat做向外導向發生問題，發現實際https憑證更換為domain name，故做法直接更新前端urlPath(或是更新憑證為IP，又是另外設定)<br><a target="_blank" rel="noopener" href="https://20..xx.xx.xx/go-%3Ehttps://test.com.tw/go">https://20..xx.xx.xx/go-&gt;https://test.com.tw/go</a></p>
-<h3 id="tomcat9-stderr-2023-03-29"><a href="#tomcat9-stderr-2023-03-29" class="headerlink" title="tomcat9-stderr.2023-03-29"></a>tomcat9-stderr.2023-03-29</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">javax.net.ssl|ERROR|10|http-nio-80-exec-1|2023-03-29 15:12:42.594 CST|TransportContext.java:341|Fatal (CERTIFICATE_UNKNOWN): No subject alternative names matching IP address 20.xx.xx.xx found (</span><br><span class="line">&quot;throwable&quot; : &#123;</span><br><span class="line">  java.security.cert.CertificateException: No subject alternative names matching IP address 20.xx.xx.xx found</span><br><span class="line">  	at java.base/sun.security.util.HostnameChecker.matchIP(HostnameChecker.java:165)</span><br><span class="line">  	at java.base/sun.security.util.HostnameChecker.match(HostnameChecker.java:101)</span><br><span class="line">  	at java.base/sun.security.ssl.X509TrustManagerImpl.checkIdentity(X509TrustManagerImpl.java:455)</span><br><span class="line">  	at java.base/sun.security.ssl.X509TrustManagerImpl.checkIdentity(X509TrustManagerImpl.java:429)</span><br><span class="line">  	at java.base/sun.security.ssl.X509TrustManagerImpl.checkTrusted(X509TrustManagerImpl.java:229)</span><br><span class="line">  	at java.base/sun.security.ssl.X509TrustManagerImpl.checkServerTrusted(X509TrustManagerImpl.java:129)</span><br><span class="line">  	at java.base/sun.security.ssl.CertificateMessage$T12CertificateConsumer.checkServerCerts(CertificateMessage.java:638)</span><br><span class="line">  	at java.base/sun.security.ssl.CertificateMessage$T12CertificateConsumer.onCertificate(CertificateMessage.java:473)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="檢查憑證"><a href="#檢查憑證" class="headerlink" title="檢查憑證"></a>檢查憑證</h3><p>1.D:\Zulu\zulu11\lib\security\xxx.cer<br>2.<a target="_blank" rel="noopener" href="https://test.com/">https://test.com</a> -&gt;瀏覽器旁邊鎖頭&gt; 檢視憑證，確認是否相同</p>
-<h3 id="hosts可評估是否修正"><a href="#hosts可評估是否修正" class="headerlink" title="hosts可評估是否修正"></a>hosts可評估是否修正</h3><p>C:\Windows\System32\drivers\etc\hos</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">20.xx.xx.xx test.com.tw</span><br></pre></td></tr></table></figure>
-
-<h3 id="前端path"><a href="#前端path" class="headerlink" title="前端path"></a>前端path</h3><p>urlPath:test.com.tw&#x2F;go</p>
-
+            <h2 id="wc-l-文件名"><a href="#wc-l-文件名" class="headerlink" title="wc -l [文件名]"></a>wc -l [文件名]</h2><h3 id="wc-指令"><a href="#wc-指令" class="headerlink" title="wc 指令"></a>wc 指令</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wc -c：計算文件中的字符數（bytes）。</span><br><span class="line">wc -w：計算文件中的單詞數（words）。</span><br><span class="line">wc -l：計算文件中的行數（lines）。</span><br><span class="line">wc -m：計算文件中的字符數（characters）。</span><br><span class="line">wc -L：計算文件中最長的行的長度（max line length）。</span><br></pre></td></tr></table></figure>
         </div>
 
         
@@ -280,7 +272,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://neiltu.github.io/linkneil/2023/04/06/031_No%20subject%20alternative%20names%20matching%20IP%20address/">https://neiltu.github.io/linkneil/2023/04/06/031_No%20subject%20alternative%20names%20matching%20IP%20address/</a></span>
+                        <span><a href="https://neiltu.github.io/linkneil/2023/04/16/041_Linux%20wc%C2%A0-l/">https://neiltu.github.io/linkneil/2023/04/16/041_Linux%20wc%C2%A0-l/</a></span>
                     </p>
                 
                 
@@ -304,7 +296,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/linkneil/tags/Tomcat/"># Tomcat</a>
+                        <a href="/linkneil/tags/Linux/"># Linux</a>
                     
                         
                 </span>
@@ -317,10 +309,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/linkneil/2023/04/07/029_Kubernetes%20notes/">Kubernetes notes</a>
+                <a class="prev" rel="prev" href="/linkneil/2023/04/17/042_Spring%20boot%20architecture/">Spring boot architecture</a>
             
             
-            <a class="next" rel="next" href="/linkneil/2023/04/05/030_Curl%20Command/">Curl Command</a>
+            <a class="next" rel="next" href="/linkneil/2023/04/15/032_Elastic%20introduction/">Elastic introduction</a>
             
         </section>
 

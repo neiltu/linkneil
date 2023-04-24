@@ -242,7 +242,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">April 4, 2023&nbsp;&nbsp;20:38:00</a>
+                        Date: <a href="#">April 7, 2023&nbsp;&nbsp;21:26:00</a>
                         </span>
                     
                     
@@ -267,7 +267,9 @@
 <h3 id="Replication-Controller"><a href="#Replication-Controller" class="headerlink" title="Replication Controller"></a>Replication Controller</h3><p>Kubernetes上用來管理Pod的數量以及狀態的controller</p>
 <h3 id="Replica-Set"><a href="#Replica-Set" class="headerlink" title="Replica Set"></a>Replica Set</h3><p>Replica Set優於Replication Controller，富彈性selector</p>
 <h3 id="Deployment"><a href="#Deployment" class="headerlink" title="Deployment"></a>Deployment</h3><p>部署application<br>application升級<br>升級過程無停機<br>Rollback version</p>
+<h3 id="kubectl-操作-Deployment"><a href="#kubectl-操作-Deployment" class="headerlink" title="kubectl 操作 Deployment"></a>kubectl 操作 Deployment</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">deployments的資訊: kubectl get deployments</span><br><span class="line">Replication Set的資訊: kubectl get rs</span><br><span class="line">deployment管理的pod升級到特定image: kubectl set image deploy/ &lt;deployment-name&gt; &lt;pod-name&gt;: &lt;image-path&gt;: &lt;version&gt;</span><br><span class="line">deployment升級狀況: kubectl rollout status deploy &lt;deployment-name&gt;</span><br><span class="line">deployment升級紀錄: kubectl rollout history deploy &lt;deployment-name&gt;</span><br><span class="line">kubectl describe deploy &lt;deployment-name&gt;</span><br><span class="line">kubectl edit deploy &lt;deployment-name&gt;</span><br><span class="line">Pod back 前版: kubectl rollout undo deploy &lt;deployment-name&gt;</span><br><span class="line">Pod back 指定: kubectl rollout undo deploy &lt;deployment-name&gt; --to-revision=n </span><br></pre></td></tr></table></figure>
 
+<h3 id="Services-外部服務與Pods的溝通"><a href="#Services-外部服務與Pods的溝通" class="headerlink" title="Services 外部服務與Pods的溝通"></a>Services 外部服務與Pods的溝通</h3>
         </div>
 
         
@@ -281,7 +283,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://neiltu.github.io/linkneil/2023/04/04/029_Kubernetes%20notes/">https://neiltu.github.io/linkneil/2023/04/04/029_Kubernetes%20notes/</a></span>
+                        <span><a href="https://neiltu.github.io/linkneil/2023/04/07/029_Kubernetes%20notes/">https://neiltu.github.io/linkneil/2023/04/07/029_Kubernetes%20notes/</a></span>
                     </p>
                 
                 
@@ -318,10 +320,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/linkneil/2023/04/05/030_Curl%20Command/">Curl Command</a>
+                <a class="prev" rel="prev" href="/linkneil/2023/04/08/033_Activemq%20jetty.xml%208186/">activemq jetty.xml 8161 close</a>
             
             
-            <a class="next" rel="next" href="/linkneil/2023/04/03/028_Docker%20introduction/">Docker introduction</a>
+            <a class="next" rel="next" href="/linkneil/2023/04/06/031_No%20subject%20alternative%20names%20matching%20IP%20address/">No subject alternative names matching IP address</a>
             
         </section>
 

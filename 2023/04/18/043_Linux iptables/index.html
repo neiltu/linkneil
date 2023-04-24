@@ -13,7 +13,7 @@
 
 
 
-<title>No subject alternative names matching IP address | Hexo</title>
+<title>Linux iptables | Hexo</title>
 
 
 
@@ -233,7 +233,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">No subject alternative names matching IP address</h1>
+            <h1 class="post-title">Linux iptables</h1>
             
                 <div class="post-meta">
                     
@@ -242,14 +242,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">April 6, 2023&nbsp;&nbsp;21:26:00</a>
+                        Date: <a href="#">April 18, 2023&nbsp;&nbsp;21:59:00</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/linkneil/categories/sof/">sof</a>
+                                <a href="/linkneil/categories/Linux/">Linux</a>
                             
                         </span>
                     
@@ -258,15 +258,19 @@
         </header>
 
         <div class="post-content">
-            <h2 id=""><a href="#" class="headerlink" title=""></a></h2><p>tomcat做向外導向發生問題，發現實際https憑證更換為domain name，故做法直接更新前端urlPath(或是更新憑證為IP，又是另外設定)<br><a target="_blank" rel="noopener" href="https://20..xx.xx.xx/go-%3Ehttps://test.com.tw/go">https://20..xx.xx.xx/go-&gt;https://test.com.tw/go</a></p>
-<h3 id="tomcat9-stderr-2023-03-29"><a href="#tomcat9-stderr-2023-03-29" class="headerlink" title="tomcat9-stderr.2023-03-29"></a>tomcat9-stderr.2023-03-29</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">javax.net.ssl|ERROR|10|http-nio-80-exec-1|2023-03-29 15:12:42.594 CST|TransportContext.java:341|Fatal (CERTIFICATE_UNKNOWN): No subject alternative names matching IP address 20.xx.xx.xx found (</span><br><span class="line">&quot;throwable&quot; : &#123;</span><br><span class="line">  java.security.cert.CertificateException: No subject alternative names matching IP address 20.xx.xx.xx found</span><br><span class="line">  	at java.base/sun.security.util.HostnameChecker.matchIP(HostnameChecker.java:165)</span><br><span class="line">  	at java.base/sun.security.util.HostnameChecker.match(HostnameChecker.java:101)</span><br><span class="line">  	at java.base/sun.security.ssl.X509TrustManagerImpl.checkIdentity(X509TrustManagerImpl.java:455)</span><br><span class="line">  	at java.base/sun.security.ssl.X509TrustManagerImpl.checkIdentity(X509TrustManagerImpl.java:429)</span><br><span class="line">  	at java.base/sun.security.ssl.X509TrustManagerImpl.checkTrusted(X509TrustManagerImpl.java:229)</span><br><span class="line">  	at java.base/sun.security.ssl.X509TrustManagerImpl.checkServerTrusted(X509TrustManagerImpl.java:129)</span><br><span class="line">  	at java.base/sun.security.ssl.CertificateMessage$T12CertificateConsumer.checkServerCerts(CertificateMessage.java:638)</span><br><span class="line">  	at java.base/sun.security.ssl.CertificateMessage$T12CertificateConsumer.onCertificate(CertificateMessage.java:473)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+            <h2 id="Linux-iptables"><a href="#Linux-iptables" class="headerlink" title="Linux iptables"></a>Linux iptables</h2><h3 id="切換root"><a href="#切換root" class="headerlink" title="切換root"></a>切換root</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[neil01@apt1 ~]$ su root</span><br></pre></td></tr></table></figure>
 
-<h3 id="檢查憑證"><a href="#檢查憑證" class="headerlink" title="檢查憑證"></a>檢查憑證</h3><p>1.D:\Zulu\zulu11\lib\security\xxx.cer<br>2.<a target="_blank" rel="noopener" href="https://test.com/">https://test.com</a> -&gt;瀏覽器旁邊鎖頭&gt; 檢視憑證，確認是否相同</p>
-<h3 id="hosts可評估是否修正"><a href="#hosts可評估是否修正" class="headerlink" title="hosts可評估是否修正"></a>hosts可評估是否修正</h3><p>C:\Windows\System32\drivers\etc\hos</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">20.xx.xx.xx test.com.tw</span><br></pre></td></tr></table></figure>
+<h3 id="查詢當前"><a href="#查詢當前" class="headerlink" title="查詢當前"></a>查詢當前</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@apt1 neil01]# iptables -L INPUT -n --line-numbers</span><br><span class="line">Chain INPUT (policy ACCEPT)</span><br><span class="line">num  target     prot opt source               destination</span><br></pre></td></tr></table></figure>
 
-<h3 id="前端path"><a href="#前端path" class="headerlink" title="前端path"></a>前端path</h3><p>urlPath:test.com.tw&#x2F;go</p>
+<h3 id="新增8161白名單，有順序性DROP至末"><a href="#新增8161白名單，有順序性DROP至末" class="headerlink" title="新增8161白名單，有順序性DROP至末"></a>新增8161白名單，有順序性DROP至末</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@apt1 neil01]# iptables -A INPUT -p tcp --dport 8161 -s 10.11.111.111 -j ACCEPT</span><br><span class="line">[root@apt1 neil01]# iptables -A INPUT -p tcp --dport 8161 -j DROP</span><br><span class="line">[root@apt1 neil01]# iptables -L INPUT -n --line-numbers</span><br><span class="line">Chain INPUT (policy ACCEPT)</span><br><span class="line">num  target     prot opt source               destination</span><br><span class="line">1    ACCEPT     tcp  --  10.11.111.111        0.0.0.0/0            tcp dpt:8161</span><br><span class="line">2    DROP       tcp  --  0.0.0.0/0            0.0.0.0/0            tcp dpt:8161</span><br></pre></td></tr></table></figure>
 
+
+<h3 id="補充-查詢"><a href="#補充-查詢" class="headerlink" title="補充-查詢:"></a>補充-查詢:</h3><p>這將使您能夠使用您的管理員許可權來保存 iptables 規則，並確保規則在系統重啟後自動載入。iptables -L INPUT -n –line-numbers<br>解釋每個意義</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">**`iptables -L INPUT -n --line-numbers`** 命令用於列出 iptables INPUT 鏈中的規則，其中：</span><br><span class="line">• **`-L`** 選項表示列出規則；</span><br><span class="line">• **`INPUT`** 選項表示要列出 INPUT 鏈中的規則；</span><br><span class="line">• **`-n`** 選項表示顯示數位格式的 IP 位址和埠號，而不是嘗試將它們解析為名稱；</span><br><span class="line">• **`--line-numbers`** 選項表示在規則清單中顯示行號，以便您可以更容易地識別和管理規則。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[root@apt1 sysconfig]# iptables -L INPUT</span><br><span class="line">Chain INPUT (policy ACCEPT)</span><br><span class="line">target     prot opt source               destination</span><br><span class="line">ACCEPT     tcp  --  10.11.111.111        anywhere             tcp dpt:patrol-snmp</span><br><span class="line">DROP       tcp  --  anywhere             anywhere             tcp dpt:patrol-snmp</span><br><span class="line"></span><br><span class="line">[root@apt1 sysconfig]# iptables -L INPUT -n</span><br><span class="line">Chain INPUT (policy ACCEPT)</span><br><span class="line">target     prot opt source               destination</span><br><span class="line">ACCEPT     tcp  --  10.11.111.111        0.0.0.0/0            tcp dpt:8161</span><br><span class="line">DROP       tcp  --  0.0.0.0/0            0.0.0.0/0            tcp dpt:8161</span><br><span class="line"></span><br><span class="line">[root@apt1 sysconfig]# iptables -L INPUT -n --line-numbers</span><br><span class="line">Chain INPUT (policy ACCEPT)</span><br><span class="line">num  target     prot opt source               destination</span><br><span class="line">1    ACCEPT     tcp  --  10.11.111.111        0.0.0.0/0            tcp dpt:8161</span><br><span class="line">2    DROP       tcp  --  0.0.0.0/0            0.0.0.0/0            tcp dpt:8161</span><br><span class="line"></span><br><span class="line">[root@apt1 neil01]# iptables -L</span><br><span class="line">Chain INPUT (policy ACCEPT)</span><br><span class="line">target     prot opt source               destination</span><br><span class="line"></span><br><span class="line">Chain FORWARD (policy ACCEPT)</span><br><span class="line">target     prot opt source               destination</span><br><span class="line"></span><br><span class="line">Chain OUTPUT (policy ACCEPT)</span><br><span class="line">target     prot opt source               destination</span><br></pre></td></tr></table></figure>
+
+<h3 id="補充-刪除更新"><a href="#補充-刪除更新" class="headerlink" title="補充-刪除更新:"></a>補充-刪除更新:</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@apt1 neil01]# iptables -D INPUT -p tcp --dport 8161 -s 10.11.111.111 -j ACCEPT</span><br><span class="line">[root@apt1 neil01]# iptables -R INPUT 1 -p tcp --dport 8161 -s 10.11.111.xxx -j ACCEPT (INPUT &lt;rule_number&gt;)</span><br></pre></td></tr></table></figure>
         </div>
 
         
@@ -280,7 +284,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://neiltu.github.io/linkneil/2023/04/06/031_No%20subject%20alternative%20names%20matching%20IP%20address/">https://neiltu.github.io/linkneil/2023/04/06/031_No%20subject%20alternative%20names%20matching%20IP%20address/</a></span>
+                        <span><a href="https://neiltu.github.io/linkneil/2023/04/18/043_Linux%20iptables/">https://neiltu.github.io/linkneil/2023/04/18/043_Linux%20iptables/</a></span>
                     </p>
                 
                 
@@ -304,7 +308,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/linkneil/tags/Tomcat/"># Tomcat</a>
+                        <a href="/linkneil/tags/iptables/"># iptables</a>
                     
                         
                 </span>
@@ -317,10 +321,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/linkneil/2023/04/07/029_Kubernetes%20notes/">Kubernetes notes</a>
             
-            
-            <a class="next" rel="next" href="/linkneil/2023/04/05/030_Curl%20Command/">Curl Command</a>
+            <a class="next" rel="next" href="/linkneil/2023/04/17/042_Spring%20boot%20architecture/">Spring boot architecture</a>
             
         </section>
 
