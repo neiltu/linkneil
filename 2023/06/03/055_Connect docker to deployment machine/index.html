@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Neil Tu">
+
+
+
+
+
+<title>Connect docker to deployment machine | Hexo</title>
+
+
+
+    <link rel="icon" href="/linkneil/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/linkneil/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/linkneil/js/script.js"></script>
+    
+    <script src="/linkneil/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/linkneil/">Neil&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/linkneil/archives">Posts</a>
+                
+                    <a class="menu-item" href="/linkneil/category">Categories</a>
+                
+                    <a class="menu-item" href="/linkneil/tag">Tags</a>
+                
+                    <a class="menu-item" href="/linkneil/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/linkneil/">Neil&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/linkneil/archives">Posts</a>
+                
+                    <a class="menu-item" href="/linkneil/category">Categories</a>
+                
+                    <a class="menu-item" href="/linkneil/tag">Tags</a>
+                
+                    <a class="menu-item" href="/linkneil/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Connect docker to deployment machine</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Neil Tu</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">June 3, 2023&nbsp;&nbsp;23:17:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/linkneil/categories/CICD/">CICD</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h2><p>Docker 是一個開源的容器化平台，用於打包、分發和運行應用程序和服務。它基於 Linux 容器（LXC）技術，提供了一個輕量級、可移植和可扩展的環境，使應用程序能夠在隔離的容器中運行，而不受底層操作系統和硬件的限制。</p>
+<h3 id="To-install-Docker-on-Ubuntu"><a href="#To-install-Docker-on-Ubuntu" class="headerlink" title="To install Docker on Ubuntu"></a>To install Docker on Ubuntu</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br></pre></td><td class="code"><pre><span class="line">root@localhost:~# sudo apt-get install docker.io</span><br><span class="line">Reading package lists... Done</span><br><span class="line">Building dependency tree... Done</span><br><span class="line">Reading state information... Done</span><br><span class="line">The following additional packages will be installed:</span><br><span class="line">  bridge-utils containerd dns-root-data dnsmasq-base pigz runc ubuntu-fan</span><br><span class="line">Suggested packages:</span><br><span class="line">  ifupdown aufs-tools cgroupfs-mount | cgroup-lite debootstrap docker-doc rinse zfs-fuse | zfsutils</span><br><span class="line">The following NEW packages will be installed:</span><br><span class="line">  bridge-utils containerd dns-root-data dnsmasq-base docker.io pigz runc ubuntu-fan</span><br><span class="line">0 upgraded, 8 newly installed, 0 to remove and 54 not upgraded.</span><br><span class="line">Need to get 72.4 MB of archives.</span><br><span class="line">After this operation, 287 MB of additional disk space will be used.</span><br><span class="line">Do you want to continue? [Y/n] Y</span><br><span class="line">Get:1 http://mirrors.linode.com/ubuntu jammy/universe amd64 pigz amd64 2.6-1 [63.6 kB]</span><br><span class="line">Get:2 http://mirrors.linode.com/ubuntu jammy/main amd64 bridge-utils amd64 1.7-1ubuntu3 [34.4 kB]</span><br><span class="line">Get:3 http://mirrors.linode.com/ubuntu jammy-updates/main amd64 runc amd64 1.1.4-0ubuntu1~22.04.3 [4,244 kB]</span><br><span class="line">Get:4 http://mirrors.linode.com/ubuntu jammy-updates/main amd64 containerd amd64 1.6.12-0ubuntu1~22.04.1 [34.4 MB]</span><br><span class="line">Get:5 http://mirrors.linode.com/ubuntu jammy/main amd64 dns-root-data all 2021011101 [5,256 B]</span><br><span class="line">Get:6 http://mirrors.linode.com/ubuntu jammy-updates/main amd64 dnsmasq-base amd64 2.86-1.1ubuntu0.3 [354 kB]</span><br><span class="line">Get:7 http://mirrors.linode.com/ubuntu jammy-updates/universe amd64 docker.io amd64 20.10.21-0ubuntu1~22.04.3 [33.3 MB]</span><br><span class="line">Get:8 http://mirrors.linode.com/ubuntu jammy/universe amd64 ubuntu-fan all 0.12.16 [35.2 kB]</span><br><span class="line">Fetched 72.4 MB in 4s (19.6 MB/s)</span><br><span class="line">Preconfiguring packages ...</span><br><span class="line">Selecting previously unselected package pigz.</span><br><span class="line">(Reading database ... 139153 files and directories currently installed.)</span><br><span class="line">Preparing to unpack .../0-pigz_2.6-1_amd64.deb ...</span><br><span class="line">Unpacking pigz (2.6-1) ...</span><br><span class="line">Selecting previously unselected package bridge-utils.</span><br><span class="line">Preparing to unpack .../1-bridge-utils_1.7-1ubuntu3_amd64.deb ...</span><br><span class="line">Unpacking bridge-utils (1.7-1ubuntu3) ...</span><br><span class="line">Selecting previously unselected package runc.</span><br><span class="line">Preparing to unpack .../2-runc_1.1.4-0ubuntu1~22.04.3_amd64.deb ...</span><br><span class="line">Unpacking runc (1.1.4-0ubuntu1~22.04.3) ...</span><br><span class="line">Selecting previously unselected package containerd.</span><br><span class="line">Preparing to unpack .../3-containerd_1.6.12-0ubuntu1~22.04.1_amd64.deb ...</span><br><span class="line">Unpacking containerd (1.6.12-0ubuntu1~22.04.1) ...</span><br><span class="line">Selecting previously unselected package dns-root-data.</span><br><span class="line">Preparing to unpack .../4-dns-root-data_2021011101_all.deb ...</span><br><span class="line">Unpacking dns-root-data (2021011101) ...</span><br><span class="line">Selecting previously unselected package dnsmasq-base.</span><br><span class="line">Preparing to unpack .../5-dnsmasq-base_2.86-1.1ubuntu0.3_amd64.deb ...</span><br><span class="line">Unpacking dnsmasq-base (2.86-1.1ubuntu0.3) ...</span><br><span class="line">Selecting previously unselected package docker.io.</span><br><span class="line">Preparing to unpack .../6-docker.io_20.10.21-0ubuntu1~22.04.3_amd64.deb ...</span><br><span class="line">Unpacking docker.io (20.10.21-0ubuntu1~22.04.3) ...</span><br><span class="line">Selecting previously unselected package ubuntu-fan.</span><br><span class="line">Preparing to unpack .../7-ubuntu-fan_0.12.16_all.deb ...</span><br><span class="line">Unpacking ubuntu-fan (0.12.16) ...</span><br><span class="line">Setting up dnsmasq-base (2.86-1.1ubuntu0.3) ...</span><br><span class="line">Setting up runc (1.1.4-0ubuntu1~22.04.3) ...</span><br><span class="line">Setting up dns-root-data (2021011101) ...</span><br><span class="line">Setting up bridge-utils (1.7-1ubuntu3) ...</span><br><span class="line">Setting up pigz (2.6-1) ...</span><br><span class="line">Setting up containerd (1.6.12-0ubuntu1~22.04.1) ...</span><br><span class="line">Created symlink /etc/systemd/system/multi-user.target.wants/containerd.service → /lib/systemd/system/containerd.service.</span><br><span class="line">Setting up ubuntu-fan (0.12.16) ...</span><br><span class="line">Created symlink /etc/systemd/system/multi-user.target.wants/ubuntu-fan.service → /lib/systemd/system/ubuntu-fan.service.</span><br><span class="line">Setting up docker.io (20.10.21-0ubuntu1~22.04.3) ...</span><br><span class="line">Created symlink /etc/systemd/system/multi-user.target.wants/docker.service → /lib/systemd/system/docker.service.</span><br><span class="line">Created symlink /etc/systemd/system/sockets.target.wants/docker.socket → /lib/systemd/system/docker.socket.</span><br><span class="line">Processing triggers for dbus (1.12.20-2ubuntu4.1) ...</span><br><span class="line">Processing triggers for man-db (2.10.2-1) ...</span><br><span class="line">Scanning processes...</span><br><span class="line">Scanning candidates...</span><br><span class="line">Scanning linux images...</span><br><span class="line"></span><br><span class="line">Restarting services...</span><br><span class="line">Service restarts being deferred:</span><br><span class="line"> /etc/needrestart/restart.d/dbus.service</span><br><span class="line"> systemctl restart networkd-dispatcher.service</span><br><span class="line"> systemctl restart systemd-logind.service</span><br><span class="line"> systemctl restart unattended-upgrades.service</span><br><span class="line"> systemctl restart user@0.service</span><br><span class="line"></span><br><span class="line">No containers need to be restarted.</span><br><span class="line"></span><br><span class="line">No user sessions are running outdated binaries.</span><br><span class="line"></span><br><span class="line">No VM guests are running outdated hypervisor (qemu) binaries on this host.</span><br><span class="line">root@localhost:~# service docker status</span><br><span class="line">● docker.service - Docker Application Container Engine</span><br><span class="line">     Loaded: loaded (/lib/systemd/system/docker.service; enabled; vendor preset: enabled)</span><br><span class="line">     Active: active (running) since Tue 2023-05-30 14:05:55 UTC; 52s ago</span><br><span class="line">TriggeredBy: ● docker.socket</span><br><span class="line">       Docs: https://docs.docker.com</span><br><span class="line">   Main PID: 809167 (dockerd)</span><br><span class="line">      Tasks: 7</span><br><span class="line">     Memory: 29.3M</span><br><span class="line">        CPU: 329ms</span><br><span class="line">     CGroup: /system.slice/docker.service</span><br><span class="line">             └─809167 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock</span><br><span class="line"></span><br><span class="line">May 30 14:05:54 localhost dockerd[809167]: time=&quot;2023-05-30T14:05:54.634889738Z&quot; level=info msg=&quot;scheme \&quot;unix\&quot; not registered, fal&gt;</span><br><span class="line">May 30 14:05:54 localhost dockerd[809167]: time=&quot;2023-05-30T14:05:54.635043160Z&quot; level=info msg=&quot;ccResolverWrapper: sending update t&gt;</span><br><span class="line">May 30 14:05:54 localhost dockerd[809167]: time=&quot;2023-05-30T14:05:54.635258394Z&quot; level=info msg=&quot;ClientConn switching balancer to \&quot;&gt;</span><br><span class="line">May 30 14:05:54 localhost dockerd[809167]: time=&quot;2023-05-30T14:05:54.661603129Z&quot; level=info msg=&quot;Loading containers: start.&quot;</span><br><span class="line">May 30 14:05:54 localhost dockerd[809167]: time=&quot;2023-05-30T14:05:54.874677192Z&quot; level=info msg=&quot;Default bridge (docker0) is assigne&gt;</span><br><span class="line">May 30 14:05:55 localhost dockerd[809167]: time=&quot;2023-05-30T14:05:55.020787916Z&quot; level=info msg=&quot;Loading containers: done.&quot;</span><br><span class="line">May 30 14:05:55 localhost dockerd[809167]: time=&quot;2023-05-30T14:05:55.119204791Z&quot; level=info msg=&quot;Docker daemon&quot; commit=&quot;20.10.21-0ub&gt;</span><br><span class="line">May 30 14:05:55 localhost dockerd[809167]: time=&quot;2023-05-30T14:05:55.120091357Z&quot; level=info msg=&quot;Daemon has completed initialization&quot;</span><br><span class="line">May 30 14:05:55 localhost systemd[1]: Started Docker Application Container Engine.</span><br><span class="line">May 30 14:05:55 localhost dockerd[809167]: time=&quot;2023-05-30T14:05:55.187205837Z&quot; level=info msg=&quot;API listen on /run/docker.sock&quot;</span><br><span class="line"></span><br><span class="line">root@localhost:~# view /usr/lib/systemd/system/docker.service</span><br><span class="line">root@localhost:~# sudo usermod -aG docker tts2</span><br><span class="line">root@localhost:~# docker version</span><br><span class="line">Client:</span><br><span class="line"> Version:           20.10.21</span><br><span class="line"> API version:       1.41</span><br><span class="line"> Go version:        go1.18.1</span><br><span class="line"> Git commit:        20.10.21-0ubuntu1~22.04.3</span><br><span class="line"> Built:             Thu Apr 27 05:57:17 2023</span><br><span class="line"> OS/Arch:           linux/amd64</span><br><span class="line"> Context:           default</span><br><span class="line"> Experimental:      true</span><br><span class="line"></span><br><span class="line">Server:</span><br><span class="line"> Engine:</span><br><span class="line">  Version:          20.10.21</span><br><span class="line">  API version:      1.41 (minimum version 1.12)</span><br><span class="line">  Go version:       go1.18.1</span><br><span class="line">  Git commit:       20.10.21-0ubuntu1~22.04.3</span><br><span class="line">  Built:            Thu Apr 27 05:37:25 2023</span><br><span class="line">  OS/Arch:          linux/amd64</span><br><span class="line">  Experimental:     false</span><br><span class="line"> containerd:</span><br><span class="line">  Version:          1.6.12-0ubuntu1~22.04.1</span><br><span class="line">  GitCommit:</span><br><span class="line"> runc:</span><br><span class="line">  Version:          1.1.4-0ubuntu1~22.04.3</span><br><span class="line">  GitCommit:</span><br><span class="line"> docker-init:</span><br><span class="line">  Version:          0.19.0</span><br><span class="line">  GitCommit:</span><br></pre></td></tr></table></figure>
+
+<h3 id="PART3-docker-佈署目的-遠端主機"><a href="#PART3-docker-佈署目的-遠端主機" class="headerlink" title="PART3:docker 佈署目的:遠端主機"></a>PART3:docker 佈署目的:遠端主機</h3><p>參考:docker run -it -p 5566:80 -v &#x2F;home&#x2F;tts2&#x2F;cicd_tts2:&#x2F;home&#x2F;tts2&#x2F; –name&#x3D;cicd –restart&#x3D;always neil01&#x2F;dockimage<br>•	-it: 以互動式模式運行容器。<br>•	-p 5566:80: 將主機埠5566映射到容器埠80。<br>•	-v &#x2F;home&#x2F;tts2&#x2F;cicd_tts2:&#x2F;home&#x2F;tts2&#x2F;: 將主機目錄&#x2F;home&#x2F;tts2&#x2F;cicd_tts2掛載到容器目錄&#x2F;home&#x2F;tts2&#x2F;。<br>•	–name&#x3D;cicd: 為容器指定名稱cicd。<br>•	–restart&#x3D;always: 容器退出時自動重啟。<br>•	neil01&#x2F;dockimage: 要運行的鏡像名稱。</p>
+<h3 id="Dockerfile"><a href="#Dockerfile" class="headerlink" title="Dockerfile"></a>Dockerfile</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">tts2@localhost:~$ cd cicd_tts2/</span><br><span class="line">tts2@localhost:~/cicd_tts2$ ls</span><br><span class="line">Content  Images  index.html  README.md</span><br><span class="line">tts2@localhost:~/cicd_tts2$ vi Dockerfile</span><br><span class="line"></span><br><span class="line">tts2@localhost:~/cicd_tts2$ docker build -t myimage .</span><br><span class="line">Sending build context to Docker daemon  69.12kB</span><br><span class="line">Step 1/3 : FROM ubuntu:latest</span><br><span class="line">latest: Pulling from library/ubuntu</span><br><span class="line">dbf6a9befcde: Pull complete</span><br><span class="line">Digest: sha256:dfd64a3b4296d8c9b62aa3309984f8620b98d87e47492599ee20739e8eb54fbf</span><br><span class="line">Status: Downloaded newer image for ubuntu:latest</span><br><span class="line"> ---&gt; 3b418d7b466a</span><br><span class="line">Step 2/3 : COPY index.html /var/www/html/</span><br><span class="line"> ---&gt; d82e0012ebd9</span><br><span class="line">Step 3/3 : CMD [&quot;/bin/bash&quot;]</span><br><span class="line"> ---&gt; Running in 6751195d1ac6</span><br><span class="line">Removing intermediate container 6751195d1ac6</span><br><span class="line"> ---&gt; 908f581fd18e</span><br><span class="line">Successfully built 908f581fd18e</span><br><span class="line">Successfully tagged myimage:latest</span><br><span class="line"></span><br><span class="line">tts2@localhost:~/cicd_tts2$ docker images</span><br><span class="line">REPOSITORY   TAG       IMAGE ID       CREATED              SIZE</span><br><span class="line">myimage      latest    908f581fd18e   About a minute ago   77.8MB</span><br><span class="line">ubuntu       latest    3b418d7b466a   4 weeks ago          77.8MB</span><br><span class="line"></span><br><span class="line">tts2@localhost:~/cicd_tts2$ docker run -it -p 5566:80 -v /home/tts2/cicd_tts2:/home/tts2/ --name=cicd --restart=always myimage</span><br><span class="line">root@4728a8a3c624:/# ls</span><br><span class="line">bin  boot  dev  etc  home  lib  lib32  lib64  libx32  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var</span><br><span class="line">root@4728a8a3c624:~# cd /var/www/html/</span><br><span class="line">root@4728a8a3c624:/var/www/html# ls</span><br><span class="line">index.html</span><br><span class="line">root@4728a8a3c624:/var/www/html# exit</span><br><span class="line">exit</span><br><span class="line">tts2@localhost:~/cicd_tts2$ docker exec -it 4728a8a3c624 /bin/bash</span><br></pre></td></tr></table></figure>
+
+<h3 id="docker-image"><a href="#docker-image" class="headerlink" title="docker image"></a>docker image</h3><p>•	-t myimage: 為構建的鏡像指定名稱myimage。<br>•	.: 指定Dockerfile所在目錄為目前的目錄。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">tts2@localhost:~/cicd_tts2$ docker ps -a</span><br><span class="line">CONTAINER ID   IMAGE          COMMAND       CREATED              STATUS          PORTS                                   NAMES</span><br><span class="line">1b4ab8210218   908f581fd18e   &quot;/bin/bash&quot;   About a minute ago   Up 40 seconds   0.0.0.0:5566-&gt;80/tcp, :::5566-&gt;80/tcp   cicd</span><br><span class="line">tts2@localhost:~/cicd_tts2$ docker stop 1b4ab8210218</span><br><span class="line">1b4ab8210218</span><br><span class="line">tts2@localhost:~/cicd_tts2$ docker rm 1b4ab8210218</span><br><span class="line">1b4ab8210218</span><br><span class="line">tts2@localhost:~/cicd_tts2$ docker build -t myimage .</span><br><span class="line">Sending build context to Docker daemon  69.12kB</span><br><span class="line">Step 1/3 : FROM ubuntu:latest</span><br><span class="line"> ---&gt; 3b418d7b466a</span><br><span class="line">Step 2/3 : COPY . /var/www/html/</span><br><span class="line"> ---&gt; Using cache</span><br><span class="line"> ---&gt; fa4e9f4d64c2</span><br><span class="line">Step 3/3 : CMD [&quot;/bin/bash&quot;]</span><br><span class="line"> ---&gt; Using cache</span><br><span class="line"> ---&gt; 96050d5b10c7</span><br><span class="line">Successfully built 96050d5b10c7</span><br><span class="line">Successfully tagged myimage:latest</span><br><span class="line">tts2@localhost:~/cicd_tts2$ docker ps -a</span><br><span class="line">CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES</span><br><span class="line">tts2@localhost:~/cicd_tts2$ docker run -it -p 5566:80 -v /home/tts2/cicd_tts2:/home/tts2/ --name=cicd --restart=always myimage</span><br><span class="line"></span><br><span class="line">root@a79ff0caa723:/# cd /var/www/html/</span><br><span class="line">root@a79ff0caa723:/var/www/html# ls</span><br><span class="line">Content  Dockerfile  Images  README.md  index.html</span><br></pre></td></tr></table></figure>
+<h3 id="切回Jenkins-PART4"><a href="#切回Jenkins-PART4" class="headerlink" title="切回Jenkins:PART4"></a>切回Jenkins:PART4</h3><h3 id="補充指令"><a href="#補充指令" class="headerlink" title="補充指令"></a>補充指令</h3><p>images明細</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tts2@localhost:~$ docker images -a</span><br><span class="line">REPOSITORY   TAG       IMAGE ID       CREATED        SIZE</span><br><span class="line">myimage      latest    96050d5b10c7   23 hours ago   77.8MB</span><br><span class="line">&lt;none&gt;       &lt;none&gt;    fa4e9f4d64c2   23 hours ago   77.8MB</span><br><span class="line">ubuntu       latest    3b418d7b466a   5 weeks ago    77.8MB</span><br></pre></td></tr></table></figure>
+<p>清理未命名的images</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">tts2@localhost:~$ docker image prune</span><br><span class="line">WARNING! This will remove all dangling images.</span><br><span class="line">Are you sure you want to continue? [y/N] y</span><br><span class="line">Deleted Images:</span><br><span class="line">deleted: sha256:908f581fd18e299c15fe4c1613af85c9846349d2592362d9d04e4f9f3c0d2b5c</span><br><span class="line">deleted: sha256:d82e0012ebd99c0f546c9b25497696bec039c7f2bbff104cd61fb7fd2b986d10</span><br><span class="line">deleted: sha256:ed29080dca4e5409302ada129db722ebf008bfa336c1521b02f4b81315a34c8d</span><br></pre></td></tr></table></figure>
+<p>查目前run images</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tts2@localhost:~$ docker run -it myimage</span><br></pre></td></tr></table></figure>
+<p>run image</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tts2@localhost:~$ docker ps</span><br><span class="line">CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES</span><br></pre></td></tr></table></figure>
+<p>刪除容器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm &lt;container_name_or_id&gt;</span><br></pre></td></tr></table></figure>
+<p>登录到容器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it &lt;container_name_or_id&gt; /bin/bash</span><br></pre></td></tr></table></figure>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Neil Tu</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://neiltu.github.io/linkneil/2023/06/03/055_Connect%20docker%20to%20deployment%20machine/">https://neiltu.github.io/linkneil/2023/06/03/055_Connect%20docker%20to%20deployment%20machine/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Don't believe everything you hear, read, or are told. <strong>Use your own head,</strong> think, and judge. - Shakespeare</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/linkneil/tags/Docker/"># Docker</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/linkneil/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/linkneil/2023/06/04/058_ECharts/">ECharts</a>
+            
+            
+            <a class="next" rel="next" href="/linkneil/2023/06/02/054_json%20beautify.html/">json beautify.html</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Neil Tu | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

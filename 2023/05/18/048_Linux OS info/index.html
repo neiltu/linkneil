@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Neil Tu">
+
+
+
+
+
+<title>Find linux OS info | Hexo</title>
+
+
+
+    <link rel="icon" href="/linkneil/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/linkneil/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/linkneil/js/script.js"></script>
+    
+    <script src="/linkneil/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/linkneil/">Neil&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/linkneil/archives">Posts</a>
+                
+                    <a class="menu-item" href="/linkneil/category">Categories</a>
+                
+                    <a class="menu-item" href="/linkneil/tag">Tags</a>
+                
+                    <a class="menu-item" href="/linkneil/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/linkneil/">Neil&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/linkneil/archives">Posts</a>
+                
+                    <a class="menu-item" href="/linkneil/category">Categories</a>
+                
+                    <a class="menu-item" href="/linkneil/tag">Tags</a>
+                
+                    <a class="menu-item" href="/linkneil/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Find linux OS info</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Neil Tu</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">May 18, 2023&nbsp;&nbsp;22:17:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/linkneil/categories/Linux/">Linux</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="查詢作業系統資訊"><a href="#查詢作業系統資訊" class="headerlink" title="查詢作業系統資訊"></a>查詢作業系統資訊</h2><h3 id="作業系統版本"><a href="#作業系統版本" class="headerlink" title="作業系統版本"></a>作業系統版本</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[neil01@neilap ~]$ cat /etc/redhat-release</span><br><span class="line">Red Hat Enterprise Linux Server release 7.6 (Maipo)</span><br></pre></td></tr></table></figure>
+<h3 id="作業系統核心版本"><a href="#作業系統核心版本" class="headerlink" title="作業系統核心版本"></a>作業系統核心版本</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[neil01@neilap ~]$ uname -r</span><br><span class="line">3.10.0-957.el7.x86_64</span><br><span class="line">[neil01@neilap ~]$ uname -r -a</span><br><span class="line">Linux neilap 3.10.0-957.el7.x86_64 #1 SMP Thu Oct 4 20:48:51 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux</span><br></pre></td></tr></table></figure>
+
+<h2 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h2><p>名詞	含義<br>CPU物理個數	主機板數量&gt; 4<br>CPU核心數	單塊CPU處理資料的晶片組的數量，如雙核、四核等 （cpu cores）&gt; 1<br>邏輯CPU數&#x2F;執行緒數	兩項相乘&gt; 4*1</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">物理</span><br><span class="line">[neil01@neilap ~]$ grep &#x27;physical id&#x27; /proc/cpuinfo | sort -u | wc -l</span><br><span class="line">4</span><br><span class="line">核心</span><br><span class="line">[neil01@neilap ~]$ grep &#x27;core id&#x27; /proc/cpuinfo | sort -u | wc -l</span><br><span class="line">1</span><br><span class="line">執行緒數</span><br><span class="line">[neil01@neilap ~]$ cat /proc/cpuinfo | grep &quot;processor&quot; | wc -l</span><br><span class="line">4</span><br><span class="line">[neil01@neilap ~]$ grep &#x27;processor&#x27; /proc/cpuinfo | sort -u | wc -l</span><br><span class="line">4</span><br></pre></td></tr></table></figure>
+
+<h3 id="CPU-型號"><a href="#CPU-型號" class="headerlink" title="CPU  型號"></a>CPU  型號</h3><p>[neil01@neilap ~]$ cat &#x2F;proc&#x2F;cpuinfo</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">processor       : 0</span><br><span class="line">vendor_id       : GenuineIntel</span><br><span class="line">cpu family      : 6</span><br><span class="line">model           : 37</span><br><span class="line">model name      : Intel(R) Xeon(R) CPU E5-4640 v4 @ 2.10GHz</span><br><span class="line">stepping        : 1</span><br><span class="line">microcode       : 0xb000038</span><br><span class="line">cpu MHz         : 2097.570</span><br><span class="line">cache size      : 30720 KB</span><br><span class="line">physical id     : 0</span><br><span class="line">siblings        : 1</span><br><span class="line">core id         : 0</span><br><span class="line">cpu cores       : 1</span><br><span class="line">apicid          : 0</span><br><span class="line">initial apicid  : 0</span><br><span class="line">fpu             : yes</span><br><span class="line">fpu_exception   : yes</span><br><span class="line">cpuid level     : 11</span><br><span class="line">wp              : yes</span><br><span class="line">flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts mmx fxsr sse sse2 ss syscall nx rdtscp lm constant_tsc arch_perfmon pebs bts nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 cx16 sse4_1 sse4_2 x2apic popcnt tsc_deadline_timer aes hypervisor lahf_lm ssbd ibrs ibpb stibp tsc_adjust arat spec_ctrl intel_stibp flush_l1d arch_capabilities</span><br><span class="line">bogomips        : 4195.14</span><br><span class="line">clflush size    : 64</span><br><span class="line">cache_alignment : 64</span><br><span class="line">address sizes   : 42 bits physical, 48 bits virtual</span><br><span class="line">power management:</span><br></pre></td></tr></table></figure>
+
+<h3 id="CPU的詳細資訊"><a href="#CPU的詳細資訊" class="headerlink" title="CPU的詳細資訊"></a>CPU的詳細資訊</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[neil01@neilap ~]$ lscpu</span><br><span class="line">Architecture:          x86_64</span><br><span class="line">CPU op-mode(s):        32-bit, 64-bit</span><br><span class="line">Byte Order:            Little Endian</span><br><span class="line">CPU(s):                4</span><br><span class="line">On-line CPU(s) list:   0-3</span><br><span class="line">Thread(s) per core:    1</span><br><span class="line">Core(s) per socket:    1</span><br><span class="line">Socket(s):             4</span><br><span class="line">NUMA node(s):          1</span><br><span class="line">Vendor ID:             GenuineIntel</span><br><span class="line">CPU family:            6</span><br><span class="line">Model:                 37</span><br><span class="line">Model name:            Intel(R) Xeon(R) CPU E5-4640 v4 @ 2.10GHz</span><br><span class="line">Stepping:              1</span><br><span class="line">CPU MHz:               2097.570</span><br><span class="line">BogoMIPS:              4195.14</span><br><span class="line">Hypervisor vendor:     VMware</span><br><span class="line">Virtualization type:   full</span><br><span class="line">L1d cache:             32K</span><br><span class="line">L1i cache:             32K</span><br><span class="line">L2 cache:              256K</span><br><span class="line">L3 cache:              30720K</span><br><span class="line">NUMA node0 CPU(s):     0-3</span><br><span class="line">Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts mmx fxsr sse sse2 ss syscall nx rdtscp lm constant_tsc arch_perfmon pebs bts nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 cx16 sse4_1 sse4_2 x2apic popcnt tsc_deadline_timer aes hypervisor lahf_lm ssbd ibrs ibpb stibp tsc_adjust arat spec_ctrl intel_stibp flush_l1d arch_capabilities</span><br></pre></td></tr></table></figure>
+
+<h2 id="記憶體配置"><a href="#記憶體配置" class="headerlink" title="記憶體配置"></a>記憶體配置</h2><p>Mem: 記憶體的使用，記憶體暫時不用SWAP OUT、需要用時候SWAP IN<br>shared: 共享記憶體、buffers: 存放要輸出到disk、cached: 存放從disk上讀出資料</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[neil01@neilap ~]$ free -m</span><br><span class="line">              total        used        free      shared  buff/cache   available</span><br><span class="line">Mem:          15885       13186         507         736        2191        1554</span><br><span class="line">Swap:          4095        1403        2692</span><br><span class="line">[neil01@neilap ~]$ free -s 3</span><br><span class="line">每3秒讀一次</span><br></pre></td></tr></table></figure>
+<h2 id="硬碟配置"><a href="#硬碟配置" class="headerlink" title="硬碟配置"></a>硬碟配置</h2><p>#du -s 指定目錄大小彙總<br>#du -a 含檔案<br>#du -c 列出明細的同時，增加彙總值<br>#du -h帶計量單位<br>#du –max-depth&#x3D;1 子目錄深度</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[neil01@neilap ~]$ df -h</span><br><span class="line">Filesystem                 Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/mapper/rootvg-rootlv   45G   39G  6.7G  86% /</span><br><span class="line">devtmpfs                   7.8G     0  7.8G   0% /dev</span><br><span class="line">tmpfs                      7.8G  4.0K  7.8G   1% /dev/shm</span><br><span class="line">tmpfs                      7.8G  737M  7.1G  10% /run</span><br><span class="line">tmpfs                      7.8G     0  7.8G   0% /sys/fs/cgroup</span><br><span class="line">/dev/sda1                 1014M  145M  870M  15% /boot</span><br><span class="line">tmpfs                      1.6G     0  1.6G   0% /run/user/0</span><br><span class="line">tmpfs                      1.6G     0  1.6G   0% /run/user/11113</span><br><span class="line">[neil01@neilap ~]$ su root</span><br><span class="line">Password:</span><br><span class="line">[root@neilap neil01]# du -sh /home</span><br><span class="line">26G     /home</span><br><span class="line">[root@neilap neil01]# du -ach --max-depth=1 /home</span><br><span class="line">2.4G    /home/neil</span><br><span class="line">16K     /home/changert</span><br><span class="line">100K    /home/svn</span><br><span class="line">16K     /home/neil01</span><br></pre></td></tr></table></figure>
+<h3 id="目錄結構"><a href="#目錄結構" class="headerlink" title="目錄結構"></a>目錄結構</h3><p>-L指定目錄深度<br>sudo apt install tree</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@neilap neil01]# tree -L 2 /home</span><br><span class="line">bash: tree: command not found</span><br><span class="line">[root@neilap neil01]# yum -y install tree</span><br><span class="line">[root@neilap neil01]# tree -L 1 /home</span><br><span class="line">/home</span><br><span class="line">├── changert</span><br><span class="line">├── neil01</span><br><span class="line">├── svn</span><br><span class="line">├── test123</span><br><span class="line">└── tll</span><br><span class="line">11 directories, 0 files</span><br></pre></td></tr></table></figure>
+<h3 id="裝置資訊"><a href="#裝置資訊" class="headerlink" title="裝置資訊"></a>裝置資訊</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@neilap neil01]# lsblk</span><br><span class="line">NAME              MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT</span><br><span class="line">sda                 8:0    0  200G  0 disk</span><br><span class="line">├─sda1              8:1    0    1G  0 part /boot</span><br><span class="line">└─sda2              8:2    0   49G  0 part</span><br><span class="line">  ├─rootvg-rootlv 253:0    0   45G  0 lvm  /</span><br><span class="line">  └─rootvg-swaplv 253:1    0    4G  0 lvm  [SWAP]</span><br><span class="line">sr0                11:0    1 1024M  0 rom</span><br></pre></td></tr></table></figure>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Neil Tu</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://neiltu.github.io/linkneil/2023/05/18/048_Linux%20OS%20info/">https://neiltu.github.io/linkneil/2023/05/18/048_Linux%20OS%20info/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Don't believe everything you hear, read, or are told. <strong>Use your own head,</strong> think, and judge. - Shakespeare</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/linkneil/tags/CLI/"># CLI</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/linkneil/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/linkneil/2023/05/18/052_Generate%20ssh%20key/">ssh generate private key</a>
+            
+            
+            <a class="next" rel="next" href="/linkneil/2023/05/18/050_Add%20CSS%20and%20JS%20to%20Thymeleaf/">Add CSS and JS to Thymeleaf</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Neil Tu | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

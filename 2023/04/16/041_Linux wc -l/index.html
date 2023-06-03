@@ -249,7 +249,7 @@
                         <span class="post-category">
                     Category:
                             
-                                <a href="/linkneil/categories/Linux/">Linux</a>
+                                <a href="/linkneil/categories/linuxCMD/">linuxCMD</a>
                             
                         </span>
                     
@@ -259,6 +259,8 @@
 
         <div class="post-content">
             <h2 id="wc-l-文件名"><a href="#wc-l-文件名" class="headerlink" title="wc -l [文件名]"></a>wc -l [文件名]</h2><h3 id="wc-指令"><a href="#wc-指令" class="headerlink" title="wc 指令"></a>wc 指令</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wc -c：計算文件中的字符數（bytes）。</span><br><span class="line">wc -w：計算文件中的單詞數（words）。</span><br><span class="line">wc -l：計算文件中的行數（lines）。</span><br><span class="line">wc -m：計算文件中的字符數（characters）。</span><br><span class="line">wc -L：計算文件中最長的行的長度（max line length）。</span><br></pre></td></tr></table></figure>
+
+<h3 id="查詢file當中關鍵字的行數"><a href="#查詢file當中關鍵字的行數" class="headerlink" title="查詢file當中關鍵字的行數"></a>查詢file當中關鍵字的行數</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cat filename1 | Grep 202304 | wc -l</span><br><span class="line">cat filename2 | Grep 202304 | wc -l</span><br><span class="line">同關鍵字，檔案相加行數總和</span><br><span class="line">(cat filename1 &amp;&amp; cat filename2) | grep 202304 | wc -l</span><br><span class="line">多個關鍵字，檔案相加行數總和 (-E 參數啟用了擴展的規則運算式，允許我們使用 | 符號來匹配多個模式)</span><br><span class="line">(cat filename1 &amp;&amp; cat filename2) | grep -E &quot;202304|202305&quot; | wc -l</span><br></pre></td></tr></table></figure>
         </div>
 
         
@@ -296,7 +298,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/linkneil/tags/Linux/"># Linux</a>
+                        <a href="/linkneil/tags/wc/"># wc</a>
                     
                         
                 </span>

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Neil Tu">
+
+
+
+
+
+<title>Complete Jenkins CICD Using GitLab and Docker | Hexo</title>
+
+
+
+    <link rel="icon" href="/linkneil/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/linkneil/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/linkneil/js/script.js"></script>
+    
+    <script src="/linkneil/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/linkneil/">Neil&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/linkneil/archives">Posts</a>
+                
+                    <a class="menu-item" href="/linkneil/category">Categories</a>
+                
+                    <a class="menu-item" href="/linkneil/tag">Tags</a>
+                
+                    <a class="menu-item" href="/linkneil/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/linkneil/">Neil&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/linkneil/archives">Posts</a>
+                
+                    <a class="menu-item" href="/linkneil/category">Categories</a>
+                
+                    <a class="menu-item" href="/linkneil/tag">Tags</a>
+                
+                    <a class="menu-item" href="/linkneil/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Complete Jenkins CICD Using GitLab and Docker</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Neil Tu</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">June 2, 2023&nbsp;&nbsp;22:17:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/linkneil/categories/CICD/">CICD</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="make-a-project-repository"><a href="#make-a-project-repository" class="headerlink" title="make a project repository"></a>make a project repository</h2><p>GitLab 是一個開源的版本控制系統和源代碼管理平台。它提供了一個集成的開發工具套件，包括源代碼管理、持續集成和持續交付、問題跟踪、代碼審查、維基和合作工具等。<br>gitlab sign in with google account.</p>
+<h3 id="PART1-make-a-project-repository"><a href="#PART1-make-a-project-repository" class="headerlink" title="PART1:make a project repository"></a>PART1:make a project repository</h3><p>New project&gt; Create blank project&gt;<br>Project name:tts<br>Visibility Level:Public<br>No checked</p>
+<h2 id="Connect-GitLab-to-Jenkins"><a href="#Connect-GitLab-to-Jenkins" class="headerlink" title="Connect GitLab to Jenkins"></a>Connect GitLab to Jenkins</h2><h3 id="Jenkins"><a href="#Jenkins" class="headerlink" title="Jenkins"></a>Jenkins</h3><p>開源的自動化工具，用於實現持續集成和持續交付 (CI&#x2F;CD) 流程。它提供了一個可擴展的平台，使開發團隊能夠自動化構建、測試和部署軟件項目，從而加快交付速度、提高品質和降低風險。<br><a target="_blank" rel="noopener" href="https://www.jenkins.io/download/">https://www.jenkins.io/download/</a></p>
+<h3 id="download"><a href="#download" class="headerlink" title="download"></a>download</h3><p>Download Jenkins 2.387.3 LTS for&gt; Generic Java package (.war)</p>
+<h3 id="run-jenkins"><a href="#run-jenkins" class="headerlink" title="run jenkins"></a>run jenkins</h3><p>before you should install jre or jdk.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd D:\jenkins</span><br><span class="line">java -jar .\jenkins.war</span><br></pre></td></tr></table></figure>
+
+<h3 id="web-console"><a href="#web-console" class="headerlink" title="web console"></a>web console</h3><p><a target="_blank" rel="noopener" href="http://172.20.10.2:8080/login">http://172.20.10.2:8080/login</a><br>admin<br>password:C:\Users\neil.jenkins\secrets\initialAdminPassword</p>
+<h3 id="project"><a href="#project" class="headerlink" title="project"></a>project</h3><p>資訊主頁&gt; 新增作業&gt; cicd_tts2(keyin)&gt; 建置Free_Style軟體專案&gt; 確認</p>
+<h3 id="Add-Credentials-from-gitlab"><a href="#Add-Credentials-from-gitlab" class="headerlink" title="Add Credentials from gitlab"></a>Add Credentials from gitlab</h3><p>資訊主頁&gt; 管理Jenkins&gt; Manage Credentials&gt; Stores scoped to Jenkins&gt; (global)<br>Add Credentials&gt; GitLab API token(ps1)&gt; API token(ps2)</p>
+<blockquote>
+<p>ID:cicd_tts2&gt; Description:cicd_tts2&gt; create</p>
+</blockquote>
+<h3 id="資訊主頁-gt-管理Jenkins-gt-設定系統-gt-Gitlab-gt"><a href="#資訊主頁-gt-管理Jenkins-gt-設定系統-gt-Gitlab-gt" class="headerlink" title="資訊主頁&gt; 管理Jenkins&gt; 設定系統&gt; Gitlab&gt;"></a>資訊主頁&gt; 管理Jenkins&gt; 設定系統&gt; Gitlab&gt;</h3><p>V Enable authentication for ‘&#x2F;project’ end-point<br>Connection name:cicd_tts2<br>Gitlab host URL:<a target="_blank" rel="noopener" href="https://gitlab.com/">https://gitlab.com/</a><br>API Token for accessing Gitlab:剛剛新增token</p>
+<blockquote>
+<p>Test Connection&gt; 套用&gt; 儲存</p>
+</blockquote>
+<h3 id="PART2-git-佈署目的-遠端主機"><a href="#PART2-git-佈署目的-遠端主機" class="headerlink" title="PART2:git 佈署目的:遠端主機"></a>PART2:git 佈署目的:遠端主機</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mkdir cicd_tts2</span><br><span class="line">cd cicd_tts2</span><br><span class="line">vi index.html(HI)</span><br><span class="line">mkdir Images</span><br><span class="line">mkdir Content</span><br><span class="line">git init</span><br></pre></td></tr></table></figure>
+<p>switch gitlab<br><a target="_blank" rel="noopener" href="https://gitlab.com/neiltu/tts2">https://gitlab.com/neiltu/tts2</a></p>
+<p>佈署目的:遠端主機<br>a.Git global setup </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name &quot;Neil&quot;</span><br><span class="line">git config --global user.email &quot;Neil@gmail.com&quot;</span><br></pre></td></tr></table></figure>
+<p>b.Create a new repository</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git switch -c main</span><br><span class="line">touch README.md</span><br><span class="line">git add README.md</span><br><span class="line">git commit -m &quot;add README&quot;</span><br><span class="line">git push -u origin main</span><br></pre></td></tr></table></figure>
+<p>c.Push an existing folder</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git init --initial-branch=main</span><br><span class="line">git remote add origin https://gitlab.com/neiltu/tts2.git</span><br><span class="line">git add .</span><br><span class="line">git commit -m &quot;Initial commit&quot;</span><br><span class="line">git push -u origin main(輸入gitlab帳密)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">tts2@localhost:~$ mkdir cicd_tts2</span><br><span class="line">tts2@localhost:~$ cd cicd_tts2</span><br><span class="line">tts2@localhost:~/cicd_tts2$ vi index.html</span><br><span class="line">tts2@localhost:~/cicd_tts2$ mkdir Images</span><br><span class="line">tts2@localhost:~/cicd_tts2$ mkdir Content</span><br><span class="line">tts2@localhost:~/cicd_tts2$ git init</span><br><span class="line">hint: Using &#x27;master&#x27; as the name for the initial branch. This default branch name</span><br><span class="line">hint: is subject to change. To configure the initial branch name to use in all</span><br><span class="line">hint: of your new repositories, which will suppress this warning, call:</span><br><span class="line">hint:</span><br><span class="line">hint:   git config --global init.defaultBranch &lt;name&gt;</span><br><span class="line">hint:</span><br><span class="line">hint: Names commonly chosen instead of &#x27;master&#x27; are &#x27;main&#x27;, &#x27;trunk&#x27; and</span><br><span class="line">hint: &#x27;development&#x27;. The just-created branch can be renamed via this command:</span><br><span class="line">hint:</span><br><span class="line">hint:   git branch -m &lt;name&gt;</span><br><span class="line">Initialized empty Git repository in /home/tts2/cicd_tts2/.git/</span><br><span class="line">tts2@localhost:~/cicd_tts2$ git config --global user.name &quot;Neil&quot;</span><br><span class="line">tts2@localhost:~/cicd_tts2$ git config --global user.email &quot;Neil@gmail.com&quot;</span><br><span class="line"></span><br><span class="line">tts2@localhost:~/cicd_tts2$ git switch -c main</span><br><span class="line">Switched to a new branch &#x27;main&#x27;</span><br><span class="line">tts2@localhost:~/cicd_tts2$ touch README.md</span><br><span class="line">tts2@localhost:~/cicd_tts2$ git add README.md</span><br><span class="line">tts2@localhost:~/cicd_tts2$ git commit -m &quot;add README&quot;</span><br><span class="line">[main 4b2c986] add README</span><br><span class="line"> 1 file changed, 0 insertions(+), 0 deletions(-)</span><br><span class="line"> create mode 100644 README.md</span><br><span class="line"> </span><br><span class="line">tts2@localhost:~/cicd_tts2$ git push -u origin main</span><br><span class="line">Username for &#x27;https://gitlab.com&#x27;: neil01</span><br><span class="line">Password for &#x27;https://neil01@gitlab.com&#x27;:</span><br><span class="line">Enumerating objects: 6, done.</span><br><span class="line">Counting objects: 100% (6/6), done.</span><br><span class="line">Compressing objects: 100% (3/3), done.</span><br><span class="line">Writing objects: 100% (6/6), 453 bytes | 453.00 KiB/s, done.</span><br><span class="line">Total 6 (delta 0), reused 0 (delta 0), pack-reused 0</span><br><span class="line">To https://gitlab.com/neiltu/tts2.git</span><br><span class="line"> * [new branch]      main -&gt; main</span><br><span class="line">Branch &#x27;main&#x27; set up to track remote branch &#x27;main&#x27; from &#x27;origin&#x27;.</span><br><span class="line">tts2@localhost:~/cicd_tts2$ ls</span><br><span class="line">Content  Images  index.html  README.md</span><br><span class="line">tts2@localhost:~/cicd_tts2$ git init --initial-branch=main</span><br><span class="line">warning: re-init: ignored --initial-branch=main</span><br><span class="line">Reinitialized existing Git repository in /home/tts2/cicd_tts2/.git/</span><br><span class="line">tts2@localhost:~/cicd_tts2$ git remote add origin https://gitlab.com/neiltu/tts2.git</span><br><span class="line">tts2@localhost:~/cicd_tts2$ git add .</span><br><span class="line">tts2@localhost:~/cicd_tts2$ git commit -m &quot;Initial commit&quot;</span><br><span class="line">On branch main</span><br><span class="line">Your branch is up to date with &#x27;origin/main&#x27;.</span><br><span class="line"></span><br><span class="line">nothing to commit, working tree clean</span><br><span class="line">tts2@localhost:~/cicd_tts2$ git push -u origin main</span><br><span class="line">Username for &#x27;https://gitlab.com&#x27;: neil01</span><br><span class="line">Password for &#x27;https://neil01@gitlab.com&#x27;:</span><br><span class="line">Branch &#x27;main&#x27; set up to track remote branch &#x27;main&#x27; from &#x27;origin&#x27;.</span><br><span class="line">Everything up-to-date</span><br></pre></td></tr></table></figure>
+
+<h3 id="ps1-GitLab-API-token如果沒有"><a href="#ps1-GitLab-API-token如果沒有" class="headerlink" title="ps1.GitLab API token如果沒有"></a>ps1.GitLab API token如果沒有</h3><p>資訊主頁&gt; 管理Jenkins&gt; 管理外掛程式&gt; 可用的&gt; 勾選安裝重啟<br>GitLab Authentication plugin<br>GitLab Logo<br>GitLab Plugin<br>GitLab API Plugin</p>
+<h3 id="ps2-API-token"><a href="#ps2-API-token" class="headerlink" title="ps2.API token"></a>ps2.API token</h3><p>gitlab&gt; my icon(User Settings)&gt; Preferences&gt; Access Tokens<br>Token name:cicd_tts2_token<br>Expiration date:(x)<br>Select scopes:ALL<br>Your new personal access token has been created.&gt; glpat-FUHubkB5bwPsx58oFcc8(copy it we’ll not see again)</p>
+<h3 id="PART4-Add-Credentials-from-apServer"><a href="#PART4-Add-Credentials-from-apServer" class="headerlink" title="PART4:Add Credentials from apServer"></a>PART4:Add Credentials from apServer</h3><p>資訊主頁&gt; 管理Jenkins&gt; Manage Credentials&gt; Stores scoped to Jenkins&gt; (global)<br>Add Credentials&gt; SSH Username with private key(ps4)&gt;<br>ID(ip):127.111.111.77<br>Description:docker machine<br>Username:tts2<br>Private Key:參考Generate ssh key from Server<br>切換docker part3</p>
+<h3 id="ps4-SSH-Username-with-private-key如果沒有"><a href="#ps4-SSH-Username-with-private-key如果沒有" class="headerlink" title="ps4.SSH Username with private key如果沒有"></a>ps4.SSH Username with private key如果沒有</h3><p>資訊主頁&gt; 管理Jenkins&gt; 管理外掛程式&gt; 可用的&gt; 勾選安裝重啟<br>SSH Build Agents plugin<br>SSH plugin<br>SSH server</p>
+<h3 id="設定ssh-remote"><a href="#設定ssh-remote" class="headerlink" title="設定ssh remote"></a>設定ssh remote</h3><p>資訊主頁&gt; 管理Jenkins&gt; 系統設定&gt; SSH remote hosts<br>Hostname:127.111.111.77<br>Port:22<br>Credentials:docker machine</p>
+<blockquote>
+<p>Check connection&gt; apply&gt; save</p>
+</blockquote>
+<h3 id="Jenkins-setting-webhook-建"><a href="#Jenkins-setting-webhook-建" class="headerlink" title="Jenkins setting webhook(建)"></a>Jenkins setting webhook(建)</h3><p>資訊主頁&gt; 專案cicd_tts2&gt; 組態<br>原始碼管理&gt; Git&gt;<br>Repository URL:<a target="_blank" rel="noopener" href="https://gitlab.com/neiltu/tts2.git">https://gitlab.com/neiltu/tts2.git</a><br>Credentials:docker machine<br>Branch Specifier (blank for ‘any’):*&#x2F;main<br>建置觸發程序&gt; Build when a change is pushed to GitLab. GitLab webhook URL: <a target="_blank" rel="noopener" href="http://172.20.10.2:8080/project/cicd_tts2">http://172.20.10.2:8080/project/cicd_tts2</a></p>
+<blockquote>
+<p>Push Events&amp; Opened Merge Request Events<br>Apply&gt; Save</p>
+</blockquote>
+<h3 id="gitlab-setting-Webhooks-用"><a href="#gitlab-setting-Webhooks-用" class="headerlink" title="gitlab setting Webhooks(用)"></a>gitlab setting Webhooks(用)</h3><p>tts2專案&gt; Setting&gt; Webhooks</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://172.20.10.2:8080/project/cicd_tts2(ps5)%E6%9B%BF%E6%8F%9Bhttps://ea09-223-136-161-178.ngrok-free.app/project/cicd_tts2">http://172.20.10.2:8080/project/cicd_tts2(ps5)替換https://ea09-223-136-161-178.ngrok-free.app/project/cicd_tts2</a><br>Secret token:cicd-tts2<br>Trigger:ALL checked&gt; Add Webhook<br>Project Hooks (1)&gt; Test&gt; Push events&gt; Hook executed successfully: HTTP 200</p>
+</blockquote>
+<h3 id="ps5-gitlab-Webhooks"><a href="#ps5-gitlab-Webhooks" class="headerlink" title="ps5.gitlab Webhooks"></a>ps5.gitlab Webhooks</h3><p>需要https來執行，使用ngrok處理。<br><a target="_blank" rel="noopener" href="http://172.20.10.2:8080/project/cicd_tts2">http://172.20.10.2:8080/project/cicd_tts2</a></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://ea09-223-136-161-178.ngrok-free.app/project/cicd_tts2">https://ea09-223-136-161-178.ngrok-free.app/project/cicd_tts2</a><br>Ngrok 是一個用於創建安全隧道的工具，可以將本地服務器暴露給公共互聯網。它提供了一個臨時的公共 URL，允許外部用戶訪問您本地開發環境或本地主機上的服務。<br>參考:Ngrok http forward https</p>
+</blockquote>
+<h3 id="gitlab-setting-Integration-登入Jenkins"><a href="#gitlab-setting-Integration-登入Jenkins" class="headerlink" title="gitlab setting Integration(登入Jenkins)"></a>gitlab setting Integration(登入Jenkins)</h3><p>tts2專案&gt; Setting&gt; Integration Settings&gt; Jenkins<br>Jenkins server URL:<a target="_blank" rel="noopener" href="https://ea09-223-136-161-178.ngrok-free.app(查閱jenkins專案url)/">https://ea09-223-136-161-178.ngrok-free.app(查閱Jenkins專案url)</a><br>Project name:cicd_tts2<br>Username:admin<br>Password:查閱C:\Users\neil01.jenkins\secrets\initialAdminPassword</p>
+<blockquote>
+<p>Test setting&gt; Save changes</p>
+</blockquote>
+<h3 id="Jenkins-build-now"><a href="#Jenkins-build-now" class="headerlink" title="Jenkins build now"></a>Jenkins build now</h3><p>資訊主頁&gt; 專案cicd_tts2&gt; 馬上建置&gt; 下方綠色V(ok)</p>
+<h3 id="Jenkins-設定pull指令"><a href="#Jenkins-設定pull指令" class="headerlink" title="Jenkins 設定pull指令"></a>Jenkins 設定pull指令</h3><p>資訊主頁&gt; 專案cicd_tts2&gt; 建置環境&gt; Execute shell script on remote host using ssh<br>先ssh到主機上run git pull確認<br>SSH site:<a href="mailto:&#116;&#116;&#x73;&#x32;&#64;&#49;&#50;&#55;&#46;&#49;&#49;&#x31;&#46;&#49;&#49;&#x31;&#x2e;&#55;&#x37;">&#116;&#116;&#x73;&#x32;&#64;&#49;&#50;&#55;&#46;&#49;&#49;&#x31;&#46;&#49;&#49;&#x31;&#x2e;&#55;&#x37;</a><br>Command:<br>#!&#x2F;bin&#x2F;bash<br>cd &#x2F;home&#x2F;tts2&#x2F;cicd_tts2<br>git pull origin main</p>
+<blockquote>
+<p>Apply&gt; Save</p>
+</blockquote>
+<h3 id="Gitlab-異動檔案"><a href="#Gitlab-異動檔案" class="headerlink" title="Gitlab 異動檔案"></a>Gitlab 異動檔案</h3><p>tts2專案&gt; index.html(add edit1)&gt; 切換到Jenkins&gt; 建置歷程&gt; 綠V</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Neil Tu</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://neiltu.github.io/linkneil/2023/06/02/056_Complete%20Jenkins%20CICD%20Using%20GitLab%20and%20Docker/">https://neiltu.github.io/linkneil/2023/06/02/056_Complete%20Jenkins%20CICD%20Using%20GitLab%20and%20Docker/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Don't believe everything you hear, read, or are told. <strong>Use your own head,</strong> think, and judge. - Shakespeare</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/linkneil/tags/CLI/"># CLI</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/linkneil/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/linkneil/2023/06/02/057_MySQL%20View/">MySQL View</a>
+            
+            
+            <a class="next" rel="next" href="/linkneil/2023/05/29/053_Ngrok%20http%20forward%20https/">ngrok http forward https</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Neil Tu | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
