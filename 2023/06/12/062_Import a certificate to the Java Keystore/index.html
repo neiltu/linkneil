@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Neil Tu">
+
+
+
+
+
+<title>Import a certificate to the Java Keystore | Hexo</title>
+
+
+
+    <link rel="icon" href="/linkneil/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/linkneil/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/linkneil/js/script.js"></script>
+    
+    <script src="/linkneil/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/linkneil/">Neil&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/linkneil/archives">Posts</a>
+                
+                    <a class="menu-item" href="/linkneil/category">Categories</a>
+                
+                    <a class="menu-item" href="/linkneil/tag">Tags</a>
+                
+                    <a class="menu-item" href="/linkneil/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/linkneil/">Neil&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/linkneil/archives">Posts</a>
+                
+                    <a class="menu-item" href="/linkneil/category">Categories</a>
+                
+                    <a class="menu-item" href="/linkneil/tag">Tags</a>
+                
+                    <a class="menu-item" href="/linkneil/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Import a certificate to the Java Keystore</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Neil Tu</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">June 12, 2023&nbsp;&nbsp;22:34:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/linkneil/categories/CA/">CA</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="Import-a-certificate-to-the-Java-Keystore匯入憑證"><a href="#Import-a-certificate-to-the-Java-Keystore匯入憑證" class="headerlink" title="Import a certificate to the Java Keystore匯入憑證"></a>Import a certificate to the Java Keystore匯入憑證</h2><p>打開neil.p7b(certmgr)&gt; 展開憑證路徑&gt; 選網域憑證&gt; 右鍵&gt; 所有工作&gt; 匯出<br>certmgr: 或 cmd&gt; certmgr.msc</p>
+<p>選DER編碼二位元X.509(.CER)&gt; 匯出neil_20230609.cer</p>
+<p>遠端romote-ap&gt; cd D:\Zulu\zulu11.60.19\lib\security&gt; 複製neil_20230609.cer</p>
+<p>D:\Zulu\zulu11.60.19\lib\security&gt;D:\Zulu\zulu11.60.19\bin\keytool -keystore cacerts -alias FFF_20230609 -import -file neil_20230609.cer<br>Pwd: changeit</p>
+<p>確認金鑰<br>D:\Zulu\zulu11.60.19\lib\security&gt;keytool -list -keystore cacerts</p>
+<p>Web check<br>網頁鎖頭&gt; 檢視憑證&gt;<br><a target="_blank" rel="noopener" href="https://app.neil.com.tw/">https://app.neil.com.tw/</a></p>
+<p>確認效期&gt; ok</p>
+<h3 id="補充資訊"><a href="#補充資訊" class="headerlink" title="補充資訊:"></a>補充資訊:</h3><p>X.509 &amp; p7b<br>內容：<br>1.	X.509證書是具體的數字證書，用於證明實體的身份。它包含證書的所有信息，包括主體（證書的擁有者），發行者（簽署該證書的CA），有效期，公開密鑰等。<br>2.	.p7b文件通常包含一個或多個證書，並且還可以包含用於驗證這些證書的中間證書。</p>
+<p>用途：<br>1.	X.509證書通常用於對數字通信進行身份驗證和加密。它們可以用於建立安全的SSL&#x2F;TLS連接，對電子郵件進行加密，簽署數字文件等。(常見的數字證書格式，用於表示單個證書)<br>2.	.p7b文件通常用於在不同系統之間共享證書或在特定應用程序中導入證書。它們可以用於將證書從一個系統匯出並導入到另一個系統中，以便在不同的應用程序中使用。(一個或多個證書的文件，以便在不同系統之間共享或導入)</p>
+<p>p7b:<br>PKCS #7 (P7B) 憑證文件中，可能包含多個憑證。這些憑證通常按照特定的順序編排，其中包括域名憑證、根 CA 憑證和 SSL 證書授權機構（Certification Authority）憑證。</p>
+<ol>
+<li>域名憑證（xx.com.tw）：這是特定網域（xx.com.tw）的數字憑證，用於驗證和加密該網域的網站。域名憑證是由網站擁有者申請並經由認證機構簽發的。它確保該網域的身份有效性，用戶在瀏覽該網站時可以信任它的安全性。</li>
+<li>根 CA 憑證：根憑證是網絡信任鏈的最上層，它是由根憑證授權機構（Root Certificate Authority）簽發的。根憑證用於驗證中間憑證和域名憑證的合法性。根憑證被認為是信任的根源，瀏覽器和其他應用程式會預先內置根憑證，用於驗證其他憑證的有效性。</li>
+<li>SSL 證書授權機構憑證：這是 SSL 證書授權機構（Certification Authority）的憑證，它用於驗證和簽署其他憑證的合法性。SSL 證書授權機構憑證可以被用來建立信任鏈，確保憑證的有效性和可靠性。</li>
+</ol>
+<p>Keytool指令<br>(keytool -keystore cacerts -alias FFF_20230609 -import -file neil_20230609.cer)</p>
+<p>keytool -keystore <keystore-file> -alias <alias> -import -file <certificate-file><br>• -keystore <keystore-file>：指定要使用的金鑰儲存庫文件。在您的例子中，cacerts 是金鑰儲存庫的文件名。<br>• -alias <alias>：指定要為憑證設置的別名。在您的例子中，FFF_20230609 是憑證的別名。<br>• -import：指示 keytool 將憑證導入金鑰儲存庫。<br>• -file <certificate-file>：指定包含憑證數據的文件。在您的例子中，neil_20230609.cer 是包含憑證的文件。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Neil Tu</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://neiltu.github.io/linkneil/2023/06/12/062_Import%20a%20certificate%20to%20the%20Java%20Keystore/">https://neiltu.github.io/linkneil/2023/06/12/062_Import%20a%20certificate%20to%20the%20Java%20Keystore/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Don't believe everything you hear, read, or are told. <strong>Use your own head,</strong> think, and judge. - Shakespeare</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/linkneil/tags/P7B/"># P7B</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/linkneil/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/linkneil/2023/06/28/063_bat%20run/">copyfile.bat run</a>
+            
+            
+            <a class="next" rel="next" href="/linkneil/2023/06/09/061_Logging%20in%20Spring%20Boot/">Logging in Spring Boot</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Neil Tu | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

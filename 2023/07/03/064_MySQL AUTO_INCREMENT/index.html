@@ -13,7 +13,7 @@
 
 
 
-<title>activemq jetty.xml 8161 close | Hexo</title>
+<title>MySQL AUTO_INCREMENT | Hexo</title>
 
 
 
@@ -164,11 +164,76 @@
                 <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
 
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">activemq jetty.xml 8161 close</h1>
+            <h1 class="post-title">MySQL AUTO_INCREMENT</h1>
             
                 <div class="post-meta">
                     
@@ -177,14 +242,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">April 8, 2023&nbsp;&nbsp;21:26:00</a>
+                        Date: <a href="#">July 3, 2023&nbsp;&nbsp;22:17:00</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/linkneil/categories/Activemq/">Activemq</a>
+                                <a href="/linkneil/categories/MySQL/">MySQL</a>
                             
                         </span>
                     
@@ -193,49 +258,12 @@
         </header>
 
         <div class="post-content">
-            <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">## jetty.xml、8161 host 安全設置, 8161關閉外部訪問</span><br><span class="line"></span><br><span class="line">### host關閉外部訪問</span><br><span class="line">../conf/jetty.xml</span><br><span class="line">name=&quot;host&quot; value的值0.0.0.0 修改成 127.0.0.1 restart.</span><br></pre></td></tr></table></figure>
-  <bean id="jettyPort" class="org.apache.activemq.web.WebConsolePort" init-method="start">
-             <!-- the default port number for the web console -->
-        <property name="host" value="0.0.0.0"/>
-        <property name="port" value="8161"/>
-  </bean>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### activemq安全設置帳密</span><br><span class="line">../conf/jetty.xml</span><br><span class="line">authenticate value=&quot;true&quot;-&gt;&quot;false&quot;</span><br></pre></td></tr></table></figure>
-<bean id="adminSecurityConstraint"class="org.eclipse.jetty.util.security.Constraint">
-    <property name="name" value="BASIC"/>
-    <property name="roles" value="admin"/>
-    <!-- authenticate=false disable login -->
-    <property name="authenticate" value="true"/>
-</bean>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### activemq install</span><br></pre></td></tr></table></figure>
-建資料夾 mkdir /server 
-權限 chmod 777 /server
-解壓縮 tar -xzvf /server/apache-activemq-5.15.9-bin.tar.gz
-cd /server/apache-activemq-5.6.2/bin 
-權限 chmod 755 activemq 
-執行 ./activemq start >/tmp/smlog
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### check service</span><br></pre></td></tr></table></figure>
-1. ps -ef | grep activemq：此指令將會列出所有正在執行的程序（包括透過 background 方式執行的程序）
-2. nc -lp 61616 &：此指令將會開啟一個 TCP 監聽端口，監聽 61616 port
-3. netstat -anp：此指令將會顯示所有正在使用中的連線、開啟的 port 號以及相關程序的資訊，其中 netstat 是一個用於查詢系統 TCP/IP 網路狀態和統計資料的指令
-4. netstat -an | grep 61616：此指令將會列出所有與 61616 port 相關的連線和程序資訊
-5. netstat -nln | grep 61616：此指令將會列出所有正在監聽 61616 port 的程序資訊
-6. web console管理介面: http://localhost:8161/admin/
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 補充說明</span><br></pre></td></tr></table></figure>
-1. -a / --all：顯示所有資料，不管是否隱藏或是系統的資料
-2. -n / --numeric：顯示 IP 地址和 port 號，不轉換成主機名稱或服務名稱
-3. -l / --listening：只顯示正在監聽的連線
-4. -p / --processes：顯示每個連線對應的程序名稱
-5. -e / --extended：顯示詳細資訊，如 UID 和 GID
-6. -f / --full：顯示完整的資訊，包括各種狀態和檔案系統資訊
-7. -r / --reverse：反向查找，顯示目標的連線或程序
-8. -s / --stats：顯示 TCP/IP 網路統計資訊
-9. -t / --tcp：只顯示 TCP 連線
-10. -u / --udp：只顯示 UDP 連線
-11. -w / --raw：只顯示原始連線，不經過協定解析
-12. -x / --unix：只顯示 UNIX 套接字連線
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### activemq 消息排隊位置</span><br></pre></td></tr></table></figure>
-apache-activemq-5.5.0/data/kahadb/
-```
+            <h2 id=""><a href="#" class="headerlink" title=""></a></h2><h3 id="AUTO-INCREMENT"><a href="#AUTO-INCREMENT" class="headerlink" title="AUTO_INCREMENT"></a>AUTO_INCREMENT</h3><p>MySQL 的 AUTO_INCREMENT 屬性來自動帶入數列。AUTO_INCREMENT 屬性會自動將欄位設定為主鍵，並在插入新資料時自動遞增。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE example (</span><br><span class="line">    id INT NOT NULL AUTO_INCREMENT,</span><br><span class="line">    col1 VARCHAR(255),</span><br><span class="line">    PRIMARY KEY (id)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h3 id="查詢自動帶入數列"><a href="#查詢自動帶入數列" class="headerlink" title="查詢自動帶入數列"></a>查詢自動帶入數列</h3><p>在這個範例中，@rownum 變數會自動遞增，第一筆資料的 rownum 為 1，第二筆資料的 rownum 為 2</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT @rownum:=@rownum+1 rownum, col1 FROM example, (SELECT @rownum:=0) r;</span><br></pre></td></tr></table></figure>
+
         </div>
 
         
@@ -249,7 +277,7 @@ apache-activemq-5.5.0/data/kahadb/
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://neiltu.github.io/linkneil/2023/04/08/033_Activemq%20jetty.xml%208186/">https://neiltu.github.io/linkneil/2023/04/08/033_Activemq%20jetty.xml%208186/</a></span>
+                        <span><a href="https://neiltu.github.io/linkneil/2023/07/03/064_MySQL%20AUTO_INCREMENT/">https://neiltu.github.io/linkneil/2023/07/03/064_MySQL%20AUTO_INCREMENT/</a></span>
                     </p>
                 
                 
@@ -273,7 +301,7 @@ apache-activemq-5.5.0/data/kahadb/
                 <span class="tag">
                     
                     
-                        <a href="/linkneil/tags/Activemq/"># Activemq</a>
+                        <a href="/linkneil/tags/Table/"># Table</a>
                     
                         
                 </span>
@@ -286,10 +314,10 @@ apache-activemq-5.5.0/data/kahadb/
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/linkneil/2023/04/09/034_Midjourney/">Midjourney v5</a>
+                <a class="prev" rel="prev" href="/linkneil/2023/07/27/065_Shell%20jar%20start/">Shell jar start</a>
             
             
-            <a class="next" rel="next" href="/linkneil/2023/04/07/029_Kubernetes%20notes/">Kubernetes notes</a>
+            <a class="next" rel="next" href="/linkneil/2023/06/28/063_bat%20run/">copyfile.bat run</a>
             
         </section>
 

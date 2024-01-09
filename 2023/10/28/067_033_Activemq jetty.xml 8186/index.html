@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Neil Tu">
+
+
+
+
+
+<title>activemq jetty.xml 8161 close、後台簡介 | Hexo</title>
+
+
+
+    <link rel="icon" href="/linkneil/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/linkneil/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/linkneil/js/script.js"></script>
+    
+    <script src="/linkneil/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/linkneil/">Neil&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/linkneil/archives">Posts</a>
+                
+                    <a class="menu-item" href="/linkneil/category">Categories</a>
+                
+                    <a class="menu-item" href="/linkneil/tag">Tags</a>
+                
+                    <a class="menu-item" href="/linkneil/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/linkneil/">Neil&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/linkneil/archives">Posts</a>
+                
+                    <a class="menu-item" href="/linkneil/category">Categories</a>
+                
+                    <a class="menu-item" href="/linkneil/tag">Tags</a>
+                
+                    <a class="menu-item" href="/linkneil/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">activemq jetty.xml 8161 close、後台簡介</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Neil Tu</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 28, 2023&nbsp;&nbsp;21:26:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/linkneil/categories/Apache/">Apache</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="jetty-xml、8161-host-安全設置-8161關閉外部訪問"><a href="#jetty-xml、8161-host-安全設置-8161關閉外部訪問" class="headerlink" title="jetty.xml、8161 host 安全設置, 8161關閉外部訪問"></a>jetty.xml、8161 host 安全設置, 8161關閉外部訪問</h2><h3 id="host關閉外部訪問"><a href="#host關閉外部訪問" class="headerlink" title="host關閉外部訪問"></a>host關閉外部訪問</h3><p>..&#x2F;conf&#x2F;jetty.xml<br>name&#x3D;”host” value的值0.0.0.0 修改成 127.0.0.1 restart.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id=&quot;jettyPort&quot; class=&quot;org.apache.activemq.web.WebConsolePort&quot; init-method=&quot;start&quot;&gt;</span><br><span class="line">           &lt;!-- the default port number for the web console --&gt;</span><br><span class="line">      &lt;property name=&quot;host&quot; value=&quot;0.0.0.0&quot;/&gt;</span><br><span class="line">      &lt;property name=&quot;port&quot; value=&quot;8161&quot;/&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="activemq安全設置帳密"><a href="#activemq安全設置帳密" class="headerlink" title="activemq安全設置帳密"></a>activemq安全設置帳密</h3><p>..&#x2F;conf&#x2F;jetty.xml<br>authenticate value&#x3D;”true”-&gt;”false”</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id=&quot;adminSecurityConstraint&quot;class=&quot;org.eclipse.jetty.util.security.Constraint&quot;&gt;</span><br><span class="line">    &lt;property name=&quot;name&quot; value=&quot;BASIC&quot;/&gt;</span><br><span class="line">    &lt;property name=&quot;roles&quot; value=&quot;admin&quot;/&gt;</span><br><span class="line">    &lt;!-- authenticate=false disable login --&gt;</span><br><span class="line">    &lt;property name=&quot;authenticate&quot; value=&quot;true&quot;/&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="activemq-install"><a href="#activemq-install" class="headerlink" title="activemq install"></a>activemq install</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">建資料夾 mkdir /server </span><br><span class="line">權限 chmod 777 /server</span><br><span class="line">解壓縮 tar -xzvf /server/apache-activemq-5.15.9-bin.tar.gz</span><br><span class="line">cd /server/apache-activemq-5.6.2/bin </span><br><span class="line">權限 chmod 755 activemq </span><br><span class="line">執行 ./activemq start &gt;/tmp/smlog</span><br></pre></td></tr></table></figure>
+
+<h3 id="check-service"><a href="#check-service" class="headerlink" title="check service"></a>check service</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. ps -ef | grep activemq：此指令將會列出所有正在執行的程序（包括透過 background 方式執行的程序）</span><br><span class="line">2. nc -lp 61616 &amp;：此指令將會開啟一個 TCP 監聽端口，監聽 61616 port</span><br><span class="line">3. netstat -anp：此指令將會顯示所有正在使用中的連線、開啟的 port 號以及相關程序的資訊，其中 netstat 是一個用於查詢系統 TCP/IP 網路狀態和統計資料的指令</span><br><span class="line">4. netstat -an | grep 61616：此指令將會列出所有與 61616 port 相關的連線和程序資訊</span><br><span class="line">5. netstat -nln | grep 61616：此指令將會列出所有正在監聽 61616 port 的程序資訊</span><br><span class="line">6. web console管理介面: http://localhost:8161/admin/</span><br></pre></td></tr></table></figure>
+
+<h3 id="補充說明"><a href="#補充說明" class="headerlink" title="補充說明"></a>補充說明</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">1. -a / --all：顯示所有資料，不管是否隱藏或是系統的資料</span><br><span class="line">2. -n / --numeric：顯示 IP 地址和 port 號，不轉換成主機名稱或服務名稱</span><br><span class="line">3. -l / --listening：只顯示正在監聽的連線</span><br><span class="line">4. -p / --processes：顯示每個連線對應的程序名稱</span><br><span class="line">5. -e / --extended：顯示詳細資訊，如 UID 和 GID</span><br><span class="line">6. -f / --full：顯示完整的資訊，包括各種狀態和檔案系統資訊</span><br><span class="line">7. -r / --reverse：反向查找，顯示目標的連線或程序</span><br><span class="line">8. -s / --stats：顯示 TCP/IP 網路統計資訊</span><br><span class="line">9. -t / --tcp：只顯示 TCP 連線</span><br><span class="line">10. -u / --udp：只顯示 UDP 連線</span><br><span class="line">11. -w / --raw：只顯示原始連線，不經過協定解析</span><br><span class="line">12. -x / --unix：只顯示 UNIX 套接字連線</span><br></pre></td></tr></table></figure>
+
+<h3 id="activemq-消息排隊位置"><a href="#activemq-消息排隊位置" class="headerlink" title="activemq 消息排隊位置"></a>activemq 消息排隊位置</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apache-activemq-5.5.0/data/kahadb/</span><br></pre></td></tr></table></figure>
+
+<h3 id="後台介面"><a href="#後台介面" class="headerlink" title="後台介面"></a>後台介面</h3><p>Number Of Consumers 是消費者端的消費者數量。<br>Number Of Pending Messages 是當前未出佇列的數量，可以理解為總接收數-總出佇列數。<br>Messages Enqueued 是進入佇列的總數量，包括出佇列的。這個數量只增不減。<br>Messages Dequeued 可以理解為是消費這消費掉的數量。</p>
+<h3 id="舉例"><a href="#舉例" class="headerlink" title="舉例"></a>舉例</h3><p>當有一個消息進入這個佇列時，等待消費的消息是1，進入佇列的消息是1。<br>當消息消費後，等待消費的消息是0，進入佇列的消息是1，出佇列的消息是1。<br>在來一條消息時，等待消費的消息是1，進入佇列的消息就是2。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">當有一個消息進入這個佇列時，Number Of Pending Messages 是1，Messages Enqueued 是1，Number Of Consumers 是1。</span><br><span class="line">當消息消費後，Number Of Pending Messages 是0，Messages Enqueued 是1，Messages Dequeued 是1，Number Of Consumers 是1。</span><br><span class="line">在來一條消息時，Number Of Pending Messages 是1，Messages Enqueued 是2，Number Of Consumers 是1。</span><br></pre></td></tr></table></figure>
+<p>沒有消費者時，Pending Messages 和 Messages Enqueued 數量一樣。有消費者消費的時候，Pending Messages 會減少，Messages Dequeued 會增加。<br>到最後，就是入佇列和出佇列的數量一樣多。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Neil Tu</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://neiltu.github.io/linkneil/2023/10/28/067_033_Activemq%20jetty.xml%208186/">https://neiltu.github.io/linkneil/2023/10/28/067_033_Activemq%20jetty.xml%208186/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Don't believe everything you hear, read, or are told. <strong>Use your own head,</strong> think, and judge. - Shakespeare</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/linkneil/tags/ActiveMQ/"># ActiveMQ</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/linkneil/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/linkneil/2023/11/11/068_AMQ%E4%BF%AE%E8%A3%9CCVE-2023-46604%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/">AMQ修補CVE-2023-46604安全漏洞</a>
+            
+            
+            <a class="next" rel="next" href="/linkneil/2023/07/28/066_Tomato%20clock/">Tomato clock</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Neil Tu | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
